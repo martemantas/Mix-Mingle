@@ -13,7 +13,6 @@
 }
 body{
     background-color: var(--primary-bg-color);
-    /* background-image: url(bg.jpg); */
 }
 
 /* Navigation */
@@ -24,6 +23,7 @@ nav{
     padding: 1rem 2rem;
     border-bottom: 1px solid #000;
     background-color: var(--primary-bg-color);
+    
 }
 nav ul, nav li{
     display: flex;
@@ -38,6 +38,17 @@ nav li a{
 }
 nav a:hover {
     transform: scale(1.1);
+}
+nav .hamburger{
+    display: none;
+}
+nav .line{
+    display: block;
+    height: 3px;
+    width: 30px;
+    margin: 5px auto;
+    transition: all 0.3s ease-in-out;
+    background-color: #000;
 }
 
 /* Cards */
@@ -102,16 +113,52 @@ footer{
 
 @media only screen and (max-width: 600px) {
     nav {
-      flex-direction: column;
+      border-bottom: none;
+      padding: 0;
     }
     nav ul {
-      flex-direction: column;
-      padding-top: 0.5rem;
-      display: none;
+        position: fixed;
+        left: -100%;
+        padding-top: 100px;
+        flex-direction: column;
+        background-color: #fff;
+        height: 100vh;
+        max-width: 50%;
+        width: 100%;
+        text-align: center;
+        transition: 0.3s;
+        box-shadow: 5px 0px 10px 0px #aaa;
+        z-index: 5;
     }
     nav li {
-        padding: 0.5rem 0;
-        direction: rtl;
+        margin-bottom: 1.5rem;
+        font-size: 1.3rem;
+        font-weight: 500;
+    }
+    nav .active ~ ul{
+        left: 0;
+    }
+    nav .login{
+        position: absolute;
+        top: 10px;
+        right: 20px;
+    }
+
+    /* Hamburger menu */
+
+    nav .hamburger {
+        display: block;
+        margin: 30px;
+        z-index: 10;
+    }
+    .hamburger.active .line:nth-child(2){
+        opacity: 0;
+    }
+    .hamburger.active .line:nth-child(1){
+        transform: translateY(8px) rotate(45deg);
+    }
+    .hamburger.active .line:nth-child(3){
+        transform: translateY(-8px) rotate(-45deg);
     }
 
     .cards{
@@ -119,7 +166,8 @@ footer{
     }
     .card{
         margin: 30px 0;
-        height: 100px;
+        height: 75px;
+        width: 70%;
         background-color: var(--secondary-bg-color);
     }
     .card h1{
