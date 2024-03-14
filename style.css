@@ -101,12 +101,13 @@ nav .line{
 
 footer{
     text-align: center;
-  padding: 3px;
-  background-color: var(--secondary-bg-color);
-  color: #000;
-  position: absolute;
-  bottom: 0;
-  width: 100%;
+    padding: 3px;
+    background-color: var(--secondary-bg-color);
+    color: #000;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
 }
 
 /* Mobile */
@@ -148,7 +149,7 @@ footer{
 
     nav .hamburger {
         display: block;
-        margin: 30px;
+        margin: 20px;
         z-index: 10;
     }
     .hamburger.active .line:nth-child(2){
