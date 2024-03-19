@@ -103,11 +103,29 @@ footer{
     text-align: center;
     padding: 3px;
     background-color: var(--secondary-bg-color);
-    color: #000;
+    /* color: #000; */
     position: fixed;
     bottom: 0;
     left: 0;
     width: 100%;
+}
+footer .contact{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0 30%;
+    height: 150px;
+    align-items: center;
+}
+footer .contact input{
+    padding: 20px;
+    width: 250px;
+    border-radius: 20px;
+    background-color: var(--primary-bg-color);
+}
+footer p{
+    border-top: 1px solid black;
+    padding: 10px 0;
 }
 
 /* Mobile */
@@ -177,5 +195,8 @@ footer{
     }
     .card img{
         display: none;
+    }
+    footer .contact{
+        margin: 0;
     }
   }
