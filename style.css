@@ -50,6 +50,11 @@ nav .line{
     transition: all 0.3s ease-in-out;
     background-color: #000;
 }
+nav .right{
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--text-primary-color);
+}
 
 /* Cards */
 
@@ -96,6 +101,73 @@ nav .line{
     align-items: center;
     flex-direction: column;
 }
+
+/* New Recipe */
+
+.container{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    overflow: hidden;
+    max-width: 390px;
+    background: #fff;
+    padding: 30px;
+    border-radius: 5px;
+    box-shadow: 0px 15px 20px rgba(0,0,0,0.1);
+}
+.container .title{
+    font-size: 35px;
+    text-align: center;
+}
+.container .field, .container .gap{
+    height: 50px;
+    width: 100%;
+    margin-top: 20px;
+}
+.container .field input, .container select{
+    height: 100%;
+    width: 100%;
+    outline: none;
+    padding-left: 15px;
+    border-radius: 5px;
+    border: 1px solid lightgrey;
+    border-bottom-width: 2px;
+    font-size: 17px;
+}
+.container .btn{
+    height: 50px;
+    width: 100%;
+    border-radius: 5px;
+    position: relative;
+    overflow: hidden;
+}
+.container .btn .btn-layer{
+    height: 100%;
+    width: 300%;
+    position: absolute;
+    left: -100%;
+    background: var(--secondary-bg-color);
+    border-radius: 5px;
+    transition: all 0.4s ease;;
+}
+.container .btn:hover .btn-layer{
+    left: 0;
+}
+.container .btn button{
+    height: 100%;
+    width: 100%;
+    z-index: 1;
+    position: relative;
+    background: none;
+    border: none;
+    color: #fff;
+    padding-left: 0;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 500;
+    cursor: pointer;
+  }
 
 /* Footer */
 
