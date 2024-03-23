@@ -9,7 +9,7 @@ if(isset($_POST["submitlogin"])){
     $result = mysqli_query($conn, "SELECT * FROM users WHERE email = '$loginname'");
     $row = mysqli_fetch_assoc($result);
     if(mysqli_num_rows($result) > 0){
-        if($password == $row["password"]){
+        if(password_verify($password, $row['password'])){
             $_SESSION["login"] = true;
             $_SESSION["id"] = $row["user_id"];
             header("Location: home.php");
@@ -35,6 +35,7 @@ if(isset($_POST["submitsignup"])){
    }
    else{
        if($password == $confirm_password){
+           $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
            $query = "INSERT INTO users VALUES('', '$name', '$password', '$email', '1')";
            mysqli_query($conn,$query);
            echo "<script>alert('Sėkmingai užsiregistravote')</script>";
