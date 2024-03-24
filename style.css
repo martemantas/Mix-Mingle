@@ -124,7 +124,6 @@ section{
     text-align: center;
     width: 200px;
     height: 200px;
-    border: 1px solid var(--third-bg-color);
     color: var(--text-primary-color);
     font-size: 24px;
     transition-duration: 0.3s;
@@ -132,6 +131,15 @@ section{
 }
 .drink-card:hover {
     scale: 1.1;
+}
+.alcoholic{
+    border: 1px solid var(--third-bg-color);
+}
+.protein{
+    border: 1px solid green;
+}
+.smoothie{
+    border: 1px solid green;
 }
 
 /* Search bar */

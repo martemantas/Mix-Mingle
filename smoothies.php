@@ -1,37 +1,92 @@
+<?php
+require 'config.php';
+if(!empty($_SESSION["id"])){
+    $sessionID = $_SESSION["id"];
+    $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$sessionID'");
+    $row = mysqli_fetch_assoc($result);
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <title>Mix&Migle</title>
 </head>
 <script src="home.js"></script>
 <body>
-    <nav>
-        <div class="hamburger">
-            <span class="line"></span>
-            <span class="line"></span>
-            <span class="line"></span>
-        </div>
-        <ul>
-            <li><a href="home.html">Home</a></li>
-            <li><a href="">Mix</a></li>
-            <li><a href="">Surprise Me</a></li>
-            <li><a href="">Search</a></li>
-        </ul>
-        <li class="login"><a href="login.html">Login</a></li>
-    </nav>
-    
-    <footer>
-        <div class="contact">
-            <div class="info">
-                <h2>Didn't find what you were looking for?</h2>
-                <h2><i>Let us know!</i></h2>
+<?php
+    echo '<nav>';
+        echo '<div class="hamburger">';
+            echo '<span class="line"></span>';
+            echo '<span class="line"></span>';
+            echo '<span class="line"></span>';
+        echo '</div>';
+        echo '<ul>';
+            echo '<li><a href="home.php">Home</a></li>';
+            echo '<li><a href="">Mix</a></li>';
+            echo '<li><a href="">Surprise Me</a></li>';
+            echo '<li><a href="">Search</a></li>';
+            if(!empty($_SESSION["id"]) && $row['role'] == 2 || 3){
+                echo '<li><a href="newRecipe.php">New recipe</a></li>';
+            }    
+        echo '</ul>';
+        if(empty($_SESSION["id"])){
+            echo '<li class="login"><a href="login.php">Login</a></li>';
+        }
+        else{
+            echo '<li class="login"><a href="logout.php">Logout</a></li>';
+        }
+    echo '</nav>';
+?>
+    <section>
+        <div class="search-view">
+            <h1>Smooties for your taste!</h1>
+            <form class="searchBar">
+                <input type="text" placeholder="What are you looking for?" required>
+                <button type="submit">Search</button>
+            </form>
+            <div class="drink-cards">
+            <?php
+                $result = mysqli_query($conn, "SELECT * FROM recipe WHERE category = 2");
+                if (mysqli_num_rows($result) > 0) {
+                    while ($row = mysqli_fetch_assoc($result)) {
+                        if (empty($row['picture'])) {
+                            echo '<div class="drink-card smoothie">' . $row['name'] . '</div>';
+                        }
+                        else{
+                            //to do
+                        }
+                    }
+                } else {
+                    echo "<h3 class='search-error'>No recipes found for the given category.</h3>";
+                }
+            ?>
+                <!-- <div class="drink-card alcoholic">Mojito</div> -->
             </div>
-            <input type="text">
         </div>
-        <p>Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>
+    </section>
+    <footer>
+    <?php
+        if(!empty($_SESSION["id"])){
+        echo '<div class="contact">';
+            echo '<div class="info">';
+                echo "<h2>Didn't find what you were looking for?</h2>";
+                echo '<h2><i>Let us know!</i></h2>';
+            echo '</div>';
+            echo '<div class="submit">';
+                echo '<input type="text">';
+                echo '<button>Send</button> ';
+            echo '</div>';
+        echo '</div>';
+        echo '<p>Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+        }
+        else{
+            echo '<p style="border-top:none">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+        }
+    ?>
     </footer>
 </body>
 </html>
