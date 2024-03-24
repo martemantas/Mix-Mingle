@@ -60,7 +60,6 @@ nav .right{
 /* Section */
 
 section{
-    height: 100vh;
     margin: 0 10%;
 }
 .search-view{
@@ -121,6 +120,16 @@ section{
     gap: 75px;
     padding: 0 0 25px 0;
     margin-top: 75px;
+    overflow-x: hidden;
+    /* box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5); */
+    box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5) inset, 0px -8px 10px -10px rgba(0, 0, 0, 0.5) inset;
+    height: 100vh;
+    padding: 10px 40px 10px 10px;
+    position: relative;
+}
+
+.drink-cards::-webkit-scrollbar {
+    display: none;
 }
 .drink-card {
     display: flex;
@@ -359,6 +368,17 @@ footer p {
     }
     .hamburger.active .line:nth-child(3){
         transform: translateY(-8px) rotate(-45deg);
+    }
+
+    section{
+        padding: 0;
+    }
+    .drink-cards{
+        gap: 25px;
+    }
+    .drink-card{
+        height: 150px;
+        width: 150px;
     }
 
     .cards{
