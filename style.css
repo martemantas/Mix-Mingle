@@ -133,6 +133,7 @@ section{
 }
 .drink-card {
     display: flex;
+    position: relative;
     justify-content: center;
     align-items: center;
     text-align: center;
@@ -154,6 +155,19 @@ section{
 }
 .smoothie{
     border: 1px solid green;
+}
+.drink-card .delete{
+    background-color: var(--third-bg-color);
+    position: absolute;
+    bottom: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    height: 25px;
+    width: 25px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
 }
 
 /* Search bar */
