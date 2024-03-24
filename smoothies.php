@@ -52,12 +52,20 @@ if(!empty($_SESSION["id"])){
             <?php
                 $result = mysqli_query($conn, "SELECT * FROM recipe WHERE category = 2");
                 if (mysqli_num_rows($result) > 0) {
-                    while ($row = mysqli_fetch_assoc($result)) {
-                        if (empty($row['picture'])) {
-                            echo '<div class="drink-card smoothie">' . $row['name'] . '</div>';
+                    while ($resultRow = mysqli_fetch_assoc($result)) {
+                        $recipeId = $resultRow['recipe_id'];
+                        if (empty($resultRow['picture'])) {
+                            if($row['role'] > 1){
+                                echo '<form method="post" action="deleteRecipe.php">';
+                                echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">X</button></div>';
+                                echo '</form>';
+                            }
+                            else{
+                                echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '</div>';
+                            }
                         }
                         else{
-                            //to do
+                            //to do picture instead of name
                         }
                     }
                 } else {
@@ -89,4 +97,27 @@ if(!empty($_SESSION["id"])){
     ?>
     </footer>
 </body>
+<script>
+    document.addEventListener("click", function(event) {
+        if (event.target.classList.contains("delete")) {
+            var result = confirm("Are you sure you want to delete?");
+            if (!result) {
+                event.preventDefault();
+            } else {
+                var recipeId = event.target.value;
+                console.log(recipeId);
+
+                var xhr = new XMLHttpRequest();
+                xhr.open("POST", "deleteRecipe.php", true);
+                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState == 4 && xhr.status == 200) {
+                        location.reload();
+                    }
+                };
+                xhr.send("recipe_id=" + recipeId);
+            }
+        }
+    });
+</script>
 </html>
