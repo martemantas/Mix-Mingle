@@ -32,7 +32,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="">Surprise Me</a></li>';
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && $row['role'] == 2 || 3){
-                echo '<li><a href="">New recipe</a></li>';
+                echo '<li><a href="newRecipe.php">New recipe</a></li>';
             }    
         echo '</ul>';
         if(empty($_SESSION["id"])){
@@ -45,19 +45,19 @@ if(!empty($_SESSION["id"])){
 ?>
     <div class="cards">
         <div class="card">
-            <a href="cocktails.html">
+            <a href="cocktails.php">
                 <img src="images/aa.png" alt="minimalistic-cocktail-image">
                 <h1>Cocktails</h1>
             </a>
         </div>
         <div class="card">
-            <a href="protein.html">
+            <a href="protein.php">
                 <img src="images/bb.png" alt="minimalistic-protein-shake-image">
                 <h1>Protein</h1>
             </a>
         </div>
         <div class="card">
-            <a href="smoothies.html">
+            <a href="smoothies.php">
                 <img src="images/cc.png" alt="minimalistic-smoothie-image">
                 <h1>Smoothies</h1>
             </a>
