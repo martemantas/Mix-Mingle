@@ -84,6 +84,7 @@ section{
     align-items: center;
     max-height: 100vh;
     margin-top: 100px;
+    padding-bottom: 60px;
 }
 .card{
     width: 400px;
