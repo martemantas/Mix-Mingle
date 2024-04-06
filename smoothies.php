@@ -55,7 +55,7 @@ if(!empty($_SESSION["id"])){
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
                         if (empty($resultRow['picture'])) {
-                            if($row['role'] > 1){
+                            if(empty($_SESSION["id"]) || $row['role'] > 1){
                                 echo '<form method="post" action="deleteRecipe.php">';
                                 echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">X</button></div>';
                                 echo '</form>';

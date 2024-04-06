@@ -28,8 +28,14 @@ if(isset($_POST["add"])){
 <body>
     <?php
         echo '<nav>';
-            echo '<a class="right" href="home.php">Back</a>';
-            // echo '<a class="right" onclick="goBack()">Back</a>';
+            echo '<div class="hamburger">';
+                echo '<span class="line"></span>';
+                echo '<span class="line"></span>';
+                echo '<span class="line"></span>';
+            echo '</div>';
+            echo '<ul>';
+                echo '<li><a href="home.php">Home</a></li>';
+            echo '</ul>';
         echo '</nav>';
     ?>
     <div class="container">
