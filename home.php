@@ -15,7 +15,7 @@ if(!empty($_SESSION["id"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <title>Document</title>
+    <title>Mix&Mingle</title>
 </head>
 <script src="home.js"></script>
 <body>
@@ -33,7 +33,10 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && $row['role'] == 2 || 3){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
-            }    
+            }   
+            if(!empty($_SESSION["id"]) && $row['role'] == 3){
+                echo '<li><a href="admin.php">Admin</a></li>';
+            } 
         echo '</ul>';
         if(empty($_SESSION["id"])){
             echo '<li class="login"><a href="login.php">Login</a></li>';
