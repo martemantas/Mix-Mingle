@@ -58,23 +58,29 @@ else{
 ?>
 
 <?php
-    $sql = "SELECT * FROM users";
+    $sql = "SELECT * FROM users where role != 3";
     $result = $conn->query($sql);
     
     if ($result->num_rows > 0) {
         echo "<table>";
-        echo "<tr><th>ID</th><th>Username</th><th>Role</th></tr>";
+        echo "<tr>
+            <th>Username</th>
+            <th>Role</th>
+        </tr>";
         while($row = $result->fetch_assoc()) {
-            echo "<tr><td>".$row["user_id"]."</td><td>".$row["username"]."</td><td>
-                <form method='post' action='updateRole.php'>
-                    <input type='hidden' name='id' value='".$row["user_id"]."'>
-                    <select name='role' onchange='this.form.submit()'>
-                        <option value='1' ".($row["role"] == 1 ? "selected" : "").">User</option>
-                        <option value='2' ".($row["role"] == 2 ? "selected" : "").">Editor</option>
-                        <option value='3' ".($row["role"] == 3 ? "selected" : "").">Admin</option>
-                    </select>
-                </form>
-            </td></tr>";
+            echo "<tr>
+                <td>".$row["username"]."</td>
+                <td>
+                    <form method='post' action='updateRole.php'>
+                        <input type='hidden' name='id' value='".$row["user_id"]."'>
+                        <select name='role' onchange='this.form.submit()'>
+                            <option value='1' ".($row["role"] == 1 ? "selected" : "").">User</option>
+                            <option value='2' ".($row["role"] == 2 ? "selected" : "").">Editor</option>
+                            <option value='3' ".($row["role"] == 3 ? "selected" : "").">Admin</option>
+                        </select>
+                    </form>
+                </td>
+            </tr>";
         }
         echo "</table>";
     } else {
