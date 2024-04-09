@@ -12,8 +12,18 @@
     --third-bg-color: #E3242B;
     --text-primary-color: #0b4f6c; /*gal 0d47a1?*/
 }
+
+html{
+    height: 100%;
+    box-sizing: border-box;
+}
+
 body{
     background-color: var(--primary-bg-color);
+    min-height: 100%;
+    display: flex;
+    flex-direction: column;
+    box-sizing: inherit;
 }
 
 /* Navigation */
@@ -74,6 +84,7 @@ section{
     align-items: center;
     max-height: 100vh;
     margin-top: 100px;
+    padding-bottom: 60px;
 }
 .card{
     width: 400px;
@@ -293,7 +304,7 @@ footer {
     text-align: center;
     padding: 3px 0;
     background-color: var(--secondary-bg-color);
-    margin-top: 100px;
+    margin-top: auto;
     width: 100%;
 }
 
