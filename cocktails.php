@@ -57,11 +57,11 @@ if(!empty($_SESSION["id"])){
                         if (empty($resultRow['picture'])) {
                             if(empty($_SESSION["id"]) || $row['role'] > 1){
                                 echo '<form method="post" action="deleteRecipe.php">';
-                                echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">X</button></div>';
+                                    echo '<div class="drink-card alcoholic" onclick="openModal(\''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
                                 echo '</form>';
                             }
                             else{
-                                echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '</div>';
+                                echo '<div class="drink-card alcoholic" onclick="openModal(\''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
                             }
                         }
                         else{
@@ -72,10 +72,90 @@ if(!empty($_SESSION["id"])){
                     echo "<h3 class='search-error'>No recipes found for the given category.</h3>";
                 }
             ?>
-                <!-- <div class="drink-card alcoholic">Mojito</div> -->
             </div>
         </div>
     </section>
+
+    <div id="newModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImg">
+            <div class="modalInfo">
+                <h2 id="modalName"></h2>
+                <p id="modalDescription"></p>
+                <div id="modalIngredients"></div>
+                <div class="modalRating">
+                    <p id="modalRatingText"></p>
+                    <div id="modalRatingStars" class="stars"></div>
+                </div>
+                <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
+            </div>
+            <div class="ingredients">adnuadnadwaiud nawd awidnaw dnawidn audawid awduin awdn awndi</div> 
+            <!-- remove dummy text, inset from database -->
+            <div class="recipeSteps">adndawdaaud nawd awidnaw dnawidn audawid awduin awdn awndi</div>
+            <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
+        </div>
+    </div>
+
+    <script>
+        var modal = document.getElementById('newModal');
+        var modalContent = document.querySelector('.modal-content');
+
+        function openModal(imgSrc, name, description, rating) {
+            var modalImg = modal.querySelector("#modalImg");
+            var modalName = modal.querySelector("#modalName");
+            var modalDescription = modal.querySelector("#modalDescription");
+            var modalRatingNumber = modal.querySelector("#modalRatingText");
+            var modalRating = modal.querySelector("#modalRatingStars");
+
+            modal.style.display = "block";
+            if(imgSrc != 'undefined'){ //not sure if works
+                modalImg.src = imgSrc;
+            }
+            modalName.innerText = name;
+            modalDescription.innerText = description;
+            modalRatingNumber.innerHTML = rating;
+            modalRating.innerHTML = '';
+            //REDO
+            if (rating == 0) {
+                modalRating.innerText = "This recipe has no ratings";
+            } else {
+                for (var i = 1; i <= 5; i++) { 
+                    var star = document.createElement('span');
+                    star.classList.add('star');
+                    if (i <= rating) {
+                        star.classList.add('filled');
+                    }
+                    modalRating.appendChild(star);
+                }
+                if (rating % 1 !== 0) {
+                    var partialStar = document.createElement('span');
+                    partialStar.classList.add('star', 'partial');
+                    var remainder = (rating % 1) * 100; // Calculate percentage of the star to be filled
+                    partialStar.style.width = remainder + '%';
+                    modalRating.appendChild(partialStar);
+                }
+            }
+        }
+
+        document.getElementById('newModal').addEventListener('click', function(event) {
+            var modalContent = document.querySelector('.modal-content');
+            if (!modalContent.contains(event.target)) {
+                closeModal();
+            }
+        });
+
+        function closeModal() {
+            modal.style.display = "none";
+            modalContent.classList.remove('flipped');
+        }
+
+        function flipCard() {
+            modalContent.classList.toggle('flipped');
+        }
+    </script>
+
+
     <footer>
     <?php
         if(!empty($_SESSION["id"])){
@@ -120,4 +200,12 @@ if(!empty($_SESSION["id"])){
         }
     });
 </script>
+<!-- to do
+fix stars
+fix flipping                        -- done?
+display info nicely
+display info nicely back side
+add image
+by clicking not on card, close card
+add in database ingredients steps -->
 </html>

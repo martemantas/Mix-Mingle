@@ -298,6 +298,126 @@ section{
     cursor: pointer;
   }
 
+/* Modal */
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 99; 
+    width: 100vw; 
+    height: 100vh; 
+    background-color: rgba(0,0,0,0.9); /*think more*/
+}
+.modal-content {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%,-50%);
+    width: 750px;
+    height: 400px;
+    color: #fff;
+    background-color: var(--text-primary-color);
+}
+#modalImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+.modalInfo {
+    padding: 20px;
+    background-color: #ccc;
+    margin: 20px 0;
+    overflow-y: auto;
+    display: grid;
+    grid-template-rows: 1fr auto auto auto;
+}
+.modalInfo h2{
+    font-size: 32px;
+}
+.modalRating {
+    grid-row: 4;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+.modalRatingText {
+    margin: 0;
+}
+.modal-content .ingredients, 
+.modal-content .recipeSteps,
+.modal-content .backBtn{
+    display: none;
+}
+#flipButton {
+    margin: 0;
+    align-self: flex-end;
+    cursor: pointer;
+}
+
+  
+.flipped .modalInfo, .flipped #modalImg {
+    display: none;
+}
+
+.flipped .ingredients {
+    display: block;
+    background-color: red;
+}
+.flipped .recipeSteps{
+    display: block;
+    background-color: #000;
+}
+.flipped .backBtn{
+    display: block;
+}
+
+.close {
+    position: absolute;
+    top: 0px;
+    right: 25px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+}
+.close:hover, .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+/* Star styles */
+.stars {
+    font-size: 24px;
+    display: flex;
+}
+
+.stars .star {
+    color: #ddd; /* Empty star color */
+}
+
+.stars .star.filled {
+    color: gold; /* Filled star color */
+}
+
+.stars .star.filled::before {
+    content: "\2605"; /* Filled star Unicode character */
+}
+
+.stars .star::before {
+    content: "\2606"; /* Empty star Unicode character */
+}
+
+/* Partially filled star */
+.stars .star.partial::before {
+    color: gold; /* Filled part color */
+    width: 100%; /* Adjust width to fill partially */
+    background: linear-gradient(to right, gold 0%, gold 100%); /* Apply gradient for partial fill */
+}
+
 /* Footer */
 
 footer {
