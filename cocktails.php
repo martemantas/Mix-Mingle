@@ -83,7 +83,6 @@ if(!empty($_SESSION["id"])){
             <div class="modalInfo">
                 <h2 id="modalName"></h2>
                 <p id="modalDescription"></p>
-                <div id="modalIngredients"></div>
                 <div class="modalRating">
                     <p id="modalRatingText"></p>
                     <div id="modalRatingStars" class="stars"></div>
@@ -100,13 +99,13 @@ if(!empty($_SESSION["id"])){
     <script>
         var modal = document.getElementById('newModal');
         var modalContent = document.querySelector('.modal-content');
+        var modalRating = modal.querySelector("#modalRatingStars");
 
         function openModal(imgSrc, name, description, rating) {
             var modalImg = modal.querySelector("#modalImg");
             var modalName = modal.querySelector("#modalName");
             var modalDescription = modal.querySelector("#modalDescription");
             var modalRatingNumber = modal.querySelector("#modalRatingText");
-            var modalRating = modal.querySelector("#modalRatingStars");
 
             modal.style.display = "block";
             if(imgSrc != 'undefined'){ //not sure if works
@@ -116,24 +115,25 @@ if(!empty($_SESSION["id"])){
             modalDescription.innerText = description;
             modalRatingNumber.innerHTML = rating;
             modalRating.innerHTML = '';
-            //REDO
             if (rating == 0) {
                 modalRating.innerText = "This recipe has no ratings";
+                modalRating.classList.add('noStars');
             } else {
-                for (var i = 1; i <= 5; i++) { 
+                var fullStars = Math.round(rating);
+
+                for (var i = 1; i <= fullStars; i++) {
                     var star = document.createElement('span');
-                    star.classList.add('star');
-                    if (i <= rating) {
-                        star.classList.add('filled');
-                    }
+                    star.classList.add('star', 'filled');
+                    star.innerHTML = '&#9733;'; // Unicode for star
                     modalRating.appendChild(star);
                 }
-                if (rating % 1 !== 0) {
-                    var partialStar = document.createElement('span');
-                    partialStar.classList.add('star', 'partial');
-                    var remainder = (rating % 1) * 100; // Calculate percentage of the star to be filled
-                    partialStar.style.width = remainder + '%';
-                    modalRating.appendChild(partialStar);
+
+                var emptyStars = 5 - fullStars;
+                for (var j = 0; j < emptyStars; j++) {
+                    var emptyStar = document.createElement('span');
+                    emptyStar.classList.add('star');
+                    emptyStar.innerHTML = '&#9734;'; // Unicode for empty star
+                    modalRating.appendChild(emptyStar);
                 }
             }
         }
@@ -148,6 +148,7 @@ if(!empty($_SESSION["id"])){
         function closeModal() {
             modal.style.display = "none";
             modalContent.classList.remove('flipped');
+            modalRating.classList.remove('noStars');
         }
 
         function flipCard() {
@@ -201,11 +202,12 @@ if(!empty($_SESSION["id"])){
     });
 </script>
 <!-- to do
-fix stars
-fix flipping                        -- done?
-display info nicely
+fix stars                           --done
+fix flipping                        --done
+display info nicely                 --done
 display info nicely back side
 add image
-by clicking not on card, close card
-add in database ingredients steps -->
+by clicking not on card, close flipCard  --done
+add in database ingredients steps       --marius
+-->
 </html>
