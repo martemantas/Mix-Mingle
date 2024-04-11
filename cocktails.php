@@ -12,7 +12,6 @@ if(!empty($_SESSION["id"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Mix&Migle</title>
 </head>
 <script src="home.js"></script>
@@ -57,11 +56,11 @@ if(!empty($_SESSION["id"])){
                         if (empty($resultRow['picture'])) {
                             if(empty($_SESSION["id"]) || $row['role'] > 1){
                                 echo '<form method="post" action="deleteRecipe.php">';
-                                    echo '<div class="drink-card alcoholic" onclick="openModal(\''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
                                 echo '</form>';
                             }
                             else{
-                                echo '<div class="drink-card alcoholic" onclick="openModal(\''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
+                                echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
                             }
                         }
                         else{
@@ -89,130 +88,18 @@ if(!empty($_SESSION["id"])){
                 </div>
                 <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
             </div>
-                <div class="ingredients">
-                    <ol>
-                        <li>1 tsp granulated sugar</li>
-                        <li>100ml lime juice</li>
-                        <li>20g mint leaves</li>
-                        <li>60ml white rum</li>
-                        <li>soda water to taste</li>
-                    </ol>
-                    <div class="leave-rating">
-                        <p>Leave a review</p>
-                        <div id="reviewStars" class="stars"></div>
-                        <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
-                    </div>
-                </div> 
-                <!-- remove dummy text, inset from database -->
-                <div class="recipeSteps">
-                    <ol>
-                        <li>1 adwaawdawdawadgar</li>
-                        <li>100ml AW r3WEFVAEdAWce</li>
-                        <li>2d awdacfvavawvawvves</li>
-                        <li>6awfawffacaawcawacawcacawwum</li>
-                        <li>soda water to taste</li>
-                        <li>soda water to taste</li>
-                        <li>soda awdawfavaawavaw taste</li>
-                        <li>soda water to taste</li>
-                    </ol>
+            <div class="ingredients">
+                <div id="ingredients"></div>
+                <div class="leave-rating">
+                    <p>Leave a review</p>
+                    <div id="reviewStars" class="stars"></div>
+                    <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
                 </div>
-                <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
+            </div> 
+            <div id="recipeSteps"></div>
+            <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
         </div>
     </div>
-
-    <script>
-        var modal = document.getElementById('newModal');
-        var modalContent = document.querySelector('.modal-content');
-        var modalRating = modal.querySelector("#modalRatingStars");
-        const reviewStars = document.getElementById('reviewStars');
-        let filledStars = 0;
-
-        function openModal(imgSrc, name, description, rating) {
-            var modalImg = modal.querySelector("#modalImg");
-            var modalName = modal.querySelector("#modalName");
-            var modalDescription = modal.querySelector("#modalDescription");
-            var modalRatingNumber = modal.querySelector("#modalRatingText");
-
-            modal.style.display = "block";
-            if(imgSrc != 'undefined'){ //not sure if works
-                modalImg.src = imgSrc;
-            }
-            modalName.innerText = name;
-            modalDescription.innerText = description;
-            modalRatingNumber.innerHTML = rating;
-            modalRating.innerHTML = '';
-            if (rating == 0) {
-                modalRatingNumber.innerHTML = null;
-                modalRating.innerText = "This recipe has no ratings";
-                modalRating.classList.add('noStars');
-            } else {
-                var fullStars = Math.round(rating);
-
-                for (var i = 1; i <= fullStars; i++) {
-                    var star = document.createElement('span');
-                    star.classList.add('star', 'filled');
-                    star.innerHTML = '&#9733;'; // Unicode for star
-                    modalRating.appendChild(star);
-                }
-
-                var emptyStars = 5 - fullStars;
-                for (var j = 0; j < emptyStars; j++) {
-                    var emptyStar = document.createElement('span');
-                    emptyStar.classList.add('star');
-                    emptyStar.innerHTML = '&#9734;'; // Unicode for empty star
-                    modalRating.appendChild(emptyStar);
-                }
-            }
-        }
-
-        document.getElementById('newModal').addEventListener('click', function(event) {
-            var modalContent = document.querySelector('.modal-content');
-            if (!modalContent.contains(event.target)) {
-                closeModal();
-            }
-        });
-
-        function closeModal() {
-            modal.style.display = "none";
-            modalContent.classList.remove('flipped');
-            modalRating.classList.remove('noStars');
-        }
-
-        function flipCard() {
-            modalContent.classList.toggle('flipped');
-        }
-
-        for (let i = 0; i < 5; i++) {
-            const star = document.createElement('span');
-            star.classList.add('reviewStar');
-            star.innerHTML = '&#9734;';
-            reviewStars.appendChild(star);
-
-            star.addEventListener('mouseenter', function () {
-                fillStars(i);
-            });
-
-            star.addEventListener('mouseleave', function () {
-                fillStars(filledStars - 1);
-            });
-
-            star.addEventListener('click', function () {
-                filledStars = i + 1;
-                console.log('Number of filled stars:', filledStars);
-            });
-        }
-
-        function fillStars(index) {
-            const stars = reviewStars.querySelectorAll('.reviewStar');
-            for (let i = 0; i <= index; i++) {
-                stars[i].innerHTML = '&#9733;';
-            }
-            for (let i = index + 1; i < 5; i++) {
-                stars[i].innerHTML = '&#9734;';
-            }
-        }
-    </script>
-
 
     <footer>
     <?php
@@ -235,6 +122,7 @@ if(!empty($_SESSION["id"])){
     ?>
     </footer>
 </body>
+<script src="modal.js"></script>
 <script>
     document.addEventListener("click", function(event) {
         if (event.target.classList.contains("delete")) {
