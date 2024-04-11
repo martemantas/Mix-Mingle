@@ -12,7 +12,6 @@ if(!empty($_SESSION["id"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Mix&Migle</title>
 </head>
 <script src="home.js"></script>
@@ -43,7 +42,7 @@ if(!empty($_SESSION["id"])){
 ?>
     <section>
         <div class="search-view">
-            <h1>Protein cocktails for your taste!</h1>
+            <h1>Delicious protein cocktails!</h1>
             <form class="searchBar">
                 <input type="text" placeholder="What are you looking for?" required>
                 <button type="submit">Search</button>
@@ -57,11 +56,11 @@ if(!empty($_SESSION["id"])){
                         if (empty($resultRow['picture'])) {
                             if(empty($_SESSION["id"]) || $row['role'] > 1){
                                 echo '<form method="post" action="deleteRecipe.php">';
-                                echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">X</button></div>';
+                                    echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
                                 echo '</form>';
                             }
                             else{
-                                echo '<div class="drink-card alcoholic">' . $resultRow['name'] . '</div>';
+                                echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
                             }
                         }
                         else{
@@ -75,6 +74,33 @@ if(!empty($_SESSION["id"])){
             </div>
         </div>
     </section>
+
+    <div id="newModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImg">
+            <div class="modalInfo">
+                <h2 id="modalName"></h2>
+                <p id="modalDescription"></p>
+                <div class="modalRating">
+                    <p id="modalRatingText"></p>
+                    <div id="modalRatingStars" class="stars"></div>
+                </div>
+                <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
+            </div>
+            <div class="ingredients">
+                <div id="ingredients"></div>
+                <div class="leave-rating">
+                    <p>Leave a review</p>
+                    <div id="reviewStars" class="stars"></div>
+                    <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
+                </div>
+            </div> 
+            <div id="recipeSteps"></div>
+            <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
+        </div>
+    </div>
+    
     <footer>
     <?php
         if(!empty($_SESSION["id"])){
@@ -96,6 +122,7 @@ if(!empty($_SESSION["id"])){
     ?>
     </footer>
 </body>
+<script src="modal.js"></script>
 <script>
     document.addEventListener("click", function(event) {
         if (event.target.classList.contains("delete")) {

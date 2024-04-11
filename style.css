@@ -166,6 +166,7 @@ section{
 }
 .smoothie{
     border: 1px solid green;
+    /* CHANGE */
 }
 .drink-card .delete{
     background-color: var(--third-bg-color);
@@ -298,6 +299,148 @@ section{
     cursor: pointer;
   }
 
+/* Modal */
+
+.modal {
+    display: none; 
+    position: fixed; 
+    z-index: 99; 
+    width: 100vw; 
+    height: 100vh; 
+    background-color: rgba(0,0,0,0.7);
+}
+.modal-content {
+    display: grid;
+    grid-template-columns: 40% 60%;
+    border-radius: 16px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    width: 750px;
+    height: 400px;
+    color: #fff;
+    background-color: var(--text-primary-color);
+}
+#modalImg {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: cover;
+}
+.modalInfo {
+    padding: 20px;
+    margin: 20px 0;
+    overflow-y: auto;
+    display: grid;
+}
+.modalInfo #modalName{
+    font-size: 32px;
+    padding-top: 20px;
+}
+.modalRating {
+    text-align: center;
+    position: relative;
+    font-size: 24px;
+}
+#modalRatingStars{
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+}
+#modalRatingText {
+    margin: 0;
+}
+.modalInfo button, .flipped .backBtn{
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    height: 50px;
+    width: 100px;
+}
+.modal-content .left-side, 
+.modal-content .right-side,
+.modal-content #recipeSteps,
+.modal-content .leave-rating,
+.modal-content .backBtn,
+.flipped .modalInfo,
+.flipped #modalImg {
+    display: none;
+}
+.flipped .left-side,
+.flipped .right-side,
+.flipped #recipeSteps,
+.flipped .leave-rating,
+.flipped .backBtn {
+    display: block;
+}
+#flipButton {
+    background-color: var(--primary-bg-color);
+    border: none;
+    border-radius: 20px;
+    font-weight: bold;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+#flipButton:hover {
+    background-color: var(--secondary-bg-color);
+}
+.backSideTitle{
+    /* position: absolute; */
+    /* top: 50px; */
+    padding-bottom: 50px;
+}
+.flipped .left-side{
+    padding: 30px 50px;
+    margin: 10px 0;
+    display: grid;
+    grid-template-rows: 80% 20%;
+    border-right: 3px solid #000;
+    /*  */
+}
+.flipped .right-side{
+    padding: 30px 50px;
+    margin: 10px 0;
+    overflow-y: auto;
+}
+.flipped .leave-rating{
+    text-align: center;
+}
+.close {
+    position: absolute;
+    top: 0px;
+    right: 25px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    transition: 0.3s;
+    z-index: 100;
+}
+.close:hover, .close:focus {
+    color: #bbb;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/* Star styles */
+
+.stars {
+    font-size: 24px;
+}
+.stars .star {
+    color: silver; 
+}
+.stars .reviewStar{
+    cursor: pointer;
+}
+.stars .star.filled, .reviewStar {
+    color: gold; 
+}
+.noStars{
+    font-size: 16px;
+}
+
 /* Footer */
 
 footer {
@@ -362,7 +505,7 @@ footer p {
         text-align: center;
         transition: 0.3s;
         box-shadow: 5px 0px 10px 0px #aaa;
-        z-index: 5;
+        z-index: 99;
     }
     nav li {
         margin-bottom: 1.5rem;
@@ -383,7 +526,7 @@ footer p {
     nav .hamburger {
         display: block;
         margin: 20px;
-        z-index: 10;
+        z-index: 100;
     }
     .hamburger.active .line:nth-child(2){
         opacity: 0;
@@ -404,8 +547,8 @@ footer p {
     .drink-card{
         height: 150px;
         width: 150px;
+        font-size: 16px;
     }
-
     .cards{
         flex-direction: column;
     }
@@ -422,7 +565,68 @@ footer p {
     .card img{
         display: none;
     }
+
+    /* Modal */
+
+    .modal-content {
+        height: 600px; 
+        max-width: 350px;
+        grid-template-columns: 100%;
+    }
+    .modalInfo {
+        padding: 15px; 
+    }
+    #modalImg {
+        max-width: 100%;
+        height: auto;
+        /* display: none; */
+    }
+    .modalInfo #modalName, 
+    .modalInfo #modalDescription,
+    .modalRating,
+    .right-side,
+    .backSideTitle {
+        text-align: center;
+    }
+    .flipped .leave-rating {
+        font-size: 18px; 
+        margin-top: 20px;
+        position: absolute;
+        bottom: 10%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+    .modalInfo button,
+    .flipped .backBtn {
+        width: 100px; 
+        font-size: 12px; 
+    }
+    .flipped .left-side,
+    .flipped .right-side {
+        padding: 20px; 
+        border-right: none;
+        margin: 0 auto;
+        /* overflow-y: auto; */
+    }
+    .backSideTitle{
+        padding-bottom: 20px;
+    }
+    .flipped .left-side{
+        margin-bottom: -20%;
+    }
+    .flipped .right-side{
+        margin-bottom: 50px;
+    }
+    .right-side ol{
+        list-style-type: none;
+    }
+
+    /* Footer */
+
     footer .contact{
         margin: 0;
+    }
+    footer .contact input{
+        margin-bottom: 10px;
     }
   }
