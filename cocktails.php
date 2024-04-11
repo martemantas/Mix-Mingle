@@ -89,10 +89,34 @@ if(!empty($_SESSION["id"])){
                 </div>
                 <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
             </div>
-            <div class="ingredients">adnuadnadwaiud nawd awidnaw dnawidn audawid awduin awdn awndi</div> 
-            <!-- remove dummy text, inset from database -->
-            <div class="recipeSteps">adndawdaaud nawd awidnaw dnawidn audawid awduin awdn awndi</div>
-            <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
+                <div class="ingredients">
+                    <ol>
+                        <li>1 tsp granulated sugar</li>
+                        <li>100ml lime juice</li>
+                        <li>20g mint leaves</li>
+                        <li>60ml white rum</li>
+                        <li>soda water to taste</li>
+                    </ol>
+                    <div class="leave-rating">
+                        <p>Leave a review</p>
+                        <div id="reviewStars" class="stars"></div>
+                        <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
+                    </div>
+                </div> 
+                <!-- remove dummy text, inset from database -->
+                <div class="recipeSteps">
+                    <ol>
+                        <li>1 adwaawdawdawadgar</li>
+                        <li>100ml AW r3WEFVAEdAWce</li>
+                        <li>2d awdacfvavawvawvves</li>
+                        <li>6awfawffacaawcawacawcacawwum</li>
+                        <li>soda water to taste</li>
+                        <li>soda water to taste</li>
+                        <li>soda awdawfavaawavaw taste</li>
+                        <li>soda water to taste</li>
+                    </ol>
+                </div>
+                <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
         </div>
     </div>
 
@@ -100,6 +124,8 @@ if(!empty($_SESSION["id"])){
         var modal = document.getElementById('newModal');
         var modalContent = document.querySelector('.modal-content');
         var modalRating = modal.querySelector("#modalRatingStars");
+        const reviewStars = document.getElementById('reviewStars');
+        let filledStars = 0;
 
         function openModal(imgSrc, name, description, rating) {
             var modalImg = modal.querySelector("#modalImg");
@@ -116,6 +142,7 @@ if(!empty($_SESSION["id"])){
             modalRatingNumber.innerHTML = rating;
             modalRating.innerHTML = '';
             if (rating == 0) {
+                modalRatingNumber.innerHTML = null;
                 modalRating.innerText = "This recipe has no ratings";
                 modalRating.classList.add('noStars');
             } else {
@@ -153,6 +180,36 @@ if(!empty($_SESSION["id"])){
 
         function flipCard() {
             modalContent.classList.toggle('flipped');
+        }
+
+        for (let i = 0; i < 5; i++) {
+            const star = document.createElement('span');
+            star.classList.add('reviewStar');
+            star.innerHTML = '&#9734;';
+            reviewStars.appendChild(star);
+
+            star.addEventListener('mouseenter', function () {
+                fillStars(i);
+            });
+
+            star.addEventListener('mouseleave', function () {
+                fillStars(filledStars - 1);
+            });
+
+            star.addEventListener('click', function () {
+                filledStars = i + 1;
+                console.log('Number of filled stars:', filledStars);
+            });
+        }
+
+        function fillStars(index) {
+            const stars = reviewStars.querySelectorAll('.reviewStar');
+            for (let i = 0; i <= index; i++) {
+                stars[i].innerHTML = '&#9733;';
+            }
+            for (let i = index + 1; i < 5; i++) {
+                stars[i].innerHTML = '&#9734;';
+            }
         }
     </script>
 
@@ -201,13 +258,4 @@ if(!empty($_SESSION["id"])){
         }
     });
 </script>
-<!-- to do
-fix stars                           --done
-fix flipping                        --done
-display info nicely                 --done
-display info nicely back side
-add image
-by clicking not on card, close flipCard  --done
-add in database ingredients steps       --marius
--->
 </html>

@@ -368,7 +368,6 @@ section{
 .flipped .recipeSteps,
 .flipped .backBtn {
     display: block;
-    background-color: red;
 }
 #flipButton {
     background-color: var(--primary-bg-color);
@@ -382,9 +381,19 @@ section{
 #flipButton:hover {
     background-color: var(--secondary-bg-color);
 }
-/* delete after */
+.flipped .ingredients{
+    padding: 40px 50px;
+    margin: 10px 0;
+    display: grid;
+    grid-template-rows: 80% 20%;
+    border-right: 3px solid #000;
+}
 .flipped .recipeSteps{
-    background-color: #000;
+    padding: 40px 50px;
+    margin: 10px 0;
+}
+.flipped .leave-rating{
+    text-align: center;
 }
 .close {
     position: absolute;
@@ -409,7 +418,10 @@ section{
 .stars .star {
     color: silver; 
 }
-.stars .star.filled {
+.stars .reviewStar{
+    cursor: pointer;
+}
+.stars .star.filled, .reviewStar {
     color: gold; 
 }
 .noStars{
