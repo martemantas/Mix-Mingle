@@ -88,15 +88,22 @@ if(!empty($_SESSION["id"])){
                 </div>
                 <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
             </div>
-            <div class="ingredients">
-                <div id="ingredients"></div>
+            <div class="left-side">
+                <div class="ingredients">
+                    <h2 class="backSideTitle">Ingredients</h2>
+                    <div id="ingredients"></div>
+                </div>
                 <div class="leave-rating">
                     <p>Leave a review</p>
                     <div id="reviewStars" class="stars"></div>
                     <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
                 </div>
             </div> 
-            <div id="recipeSteps"></div>
+            <div class="right-side">
+                <h2 class="backSideTitle">How to make it</h2>
+                <div id="recipeSteps">
+            </div>
+            </div>
             <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
         </div>
     </div>
