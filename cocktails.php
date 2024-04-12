@@ -53,6 +53,9 @@ if(!empty($_SESSION["id"])){
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
+
+                        $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
+
                         if (empty($resultRow['picture'])) {
                             if(empty($_SESSION["id"]) || $row['role'] > 1){
                                 echo '<form method="post" action="deleteRecipe.php">';
@@ -64,7 +67,14 @@ if(!empty($_SESSION["id"])){
                             }
                         }
                         else{
-                            //to do picture instead of name
+                            if(empty($_SESSION["id"]) || $row['role'] > 1){
+                                echo '<form method="post" action="deleteRecipe.php">';
+                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                echo '</form>';
+                            }
+                            else{
+                                echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
+                            }
                         }
                     }
                 } else {

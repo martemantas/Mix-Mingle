@@ -11,14 +11,42 @@ if(isset($_POST["add"])){
     $description = $_POST["description"];
     $category = $_POST["category_id"];
 
-    if (empty($name) || empty($description) || empty($instructions)) {
-        $_SESSION['error'] = "Užpildykite visus laukus.";
-        exit();
+    if (empty($name) || empty($description)) {
+        echo "<script>alert('Please fill in all the fields.')</script>";
     }
 
-    $query = "INSERT INTO recipe VALUES('', '$name', '$description', '', '$user', '', '$category')";
+    $filename = basename($_FILES["file"]["name"]);
+    $target_file = $filename;
+    $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+    // Insert new recipe into the database
+    $insertRecipe = "INSERT INTO `recipe` (`name`, `description`, `picture`, `creator`, `category`) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($insertRecipe);
+    $stmt->bind_param("ssssi", $name, $description, $fileType, $user, $category);
+
+    if ($stmt->execute()) {
+        // Get the inserted recipe_id
+        $recipeID = $stmt->insert_id;
+
+        // Save uploaded picture
+        $targetFolder = "recipes/";
+        $targetFile = $targetFolder . $recipeID . "." . $fileType;
+        
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFile)) {
+            echo "<script>alert('Recipe added.')</script>";
+        } else {
+           echo "<script>alert('Failed to save the picture.')</script>";
+           $queryDelete = "DELETE FROM `recipe` WHERE `recipe`.`recipe_id` ='$recipeID'";
+           $result = $conn->query($queryDelete);
+        }
+   } else {
+        echo "<script>alert('Recipe already exists.')</script>";
+   }
+
+    /*$query = "INSERT INTO recipe VALUES('', '$name', '$description', '', '$user', '', '$category')";
            mysqli_query($conn,$query);
-           echo "<script>alert('Recipe has been saved')</script>";
+           echo "<script>alert('Recipe has been saved')</script>";*/
+
 }
 ?>
 <!DOCTYPE html>
@@ -45,7 +73,7 @@ if(isset($_POST["add"])){
     ?>
     <div class="container">
         <h1 class="title">New recipe</h1>
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="field">
                 <input type="text" name="name" placeholder="Recipe name" required>
             </div>
@@ -54,8 +82,8 @@ if(isset($_POST["add"])){
             </div>
 
             <div class="gap">
-                <label style = "margin-left:10px" for="file">Upload a photo:</label>
-                <input class="form-control" type="file" name="uploadfile" id="file" accept="image/png, image/jpeg, image/jpg" required>
+                <label style = "margin-left:10px" for="file">Upload recipe photo:</label>
+                <input type="file" name="file" id="file" accept="image/png, image/jpeg, image/jpg" required>
             </div>
 
             <div class="field">
@@ -72,10 +100,32 @@ if(isset($_POST["add"])){
 
             <div class="field btn">
                 <div class="btn-layer"></div>
-                <button type="submit" name="add" onsubmit="return validateForm()">Add</button>
+                <button type="submit" name="add" >Add</button>
             </div>
         </form>
     </div>
+
+    <div>
+        <p style="margin-left: 10%; color: green;">
+            <?php 
+                if(isset($_SESSION['message']))
+                {
+                    echo $_SESSION['message']; 
+                    unset($_SESSION['message']); // Clear the message after displaying it
+                }
+            ?>
+        </p>
+        <p style="margin-left: 10%; color: red;">
+            <?php 
+                if(isset($_SESSION['error']))
+                {
+                    echo $_SESSION['error']; 
+                    unset($_SESSION['error']); // Clear the message after displaying it
+                }
+            ?>
+        </p>
+    </div>
+    
     <footer style="position:fixed; bottom:0;">
         <p style="border-top: none;">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>
     </footer>
