@@ -46,6 +46,7 @@ nav li{
 nav li a{
     text-decoration: none;
     color: var(--text-primary-color);
+    font-weight:bold;
 }
 nav a:hover {
     transform: scale(1.1);
@@ -143,17 +144,26 @@ section{
     display: none;
 }
 .drink-card {
-    display: flex;
+    display: list-item;
     position: relative;
     justify-content: center;
     align-items: center;
     text-align: center;
     width: 200px;
-    height: 200px;
+    height: 250px;
     color: var(--text-primary-color);
     font-size: 24px;
     transition-duration: 0.3s;
     cursor: pointer;
+    border-radius: 10px;
+}
+.drink-card img {
+    max-width: 100%;
+    border-radius: 8px;
+}
+.drink-card h1 {
+    margin: 0px;
+    padding: 0px;
 }
 .drink-card:hover {
     scale: 1.1;
@@ -172,7 +182,8 @@ section{
     background-color: var(--third-bg-color);
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 90%;
+    top: 5%;
     transform: translateX(-50%);
     height: 25px;
     width: 25px;
@@ -547,7 +558,7 @@ footer p {
         gap: 25px;
     }
     .drink-card{
-        height: 150px;
+        height: 180px;
         width: 150px;
         font-size: 16px;
     }
@@ -571,7 +582,7 @@ footer p {
     /* Modal */
 
     .modal-content {
-        height: 600px; 
+        height: 650px; 
         max-width: 350px;
         grid-template-columns: 100%;
     }

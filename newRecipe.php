@@ -25,10 +25,9 @@ if(isset($_POST["add"])){
     $stmt->bind_param("ssssi", $name, $description, $fileType, $user, $category);
 
     if ($stmt->execute()) {
-        // Get the inserted recipe_id
         $recipeID = $stmt->insert_id;
 
-        // Save uploaded picture
+        // Save uploaded picture in recipes folder
         $targetFolder = "recipes/";
         $targetFile = $targetFolder . $recipeID . "." . $fileType;
         
@@ -103,27 +102,6 @@ if(isset($_POST["add"])){
                 <button type="submit" name="add" >Add</button>
             </div>
         </form>
-    </div>
-
-    <div>
-        <p style="margin-left: 10%; color: green;">
-            <?php 
-                if(isset($_SESSION['message']))
-                {
-                    echo $_SESSION['message']; 
-                    unset($_SESSION['message']); // Clear the message after displaying it
-                }
-            ?>
-        </p>
-        <p style="margin-left: 10%; color: red;">
-            <?php 
-                if(isset($_SESSION['error']))
-                {
-                    echo $_SESSION['error']; 
-                    unset($_SESSION['error']); // Clear the message after displaying it
-                }
-            ?>
-        </p>
     </div>
     
     <footer style="position:fixed; bottom:0;">
