@@ -11,6 +11,11 @@ if(isset($_POST["add"])){
     $description = $_POST["description"];
     $category = $_POST["category_id"];
 
+    if (empty($name) || empty($description) || empty($instructions)) {
+        $_SESSION['error'] = "Užpildykite visus laukus.";
+        exit();
+    }
+
     $query = "INSERT INTO recipe VALUES('', '$name', '$description', '', '$user', '', '$category')";
            mysqli_query($conn,$query);
            echo "<script>alert('Recipe has been saved')</script>";
@@ -42,14 +47,17 @@ if(isset($_POST["add"])){
         <h1 class="title">New recipe</h1>
         <form action="" method="POST">
             <div class="field">
-                <input type="text" name="name" placeholder="Recipe name">
+                <input type="text" name="name" placeholder="Recipe name" required>
             </div>
             <div class="field">
-                <input type="text" name="description" placeholder="Recipe description">
+                <input type="text" name="description" placeholder="Recipe description" required>
             </div>
+
             <div class="gap">
-                <input class="form-control" type="file" name="uploadfile" value="" />
+                <label style = "margin-left:10px" for="file">Upload a photo:</label>
+                <input class="form-control" type="file" name="uploadfile" id="file" accept="image/png, image/jpeg, image/jpg" required>
             </div>
+
             <div class="field">
                 <select name="category_id">
                     <?php
@@ -64,7 +72,7 @@ if(isset($_POST["add"])){
 
             <div class="field btn">
                 <div class="btn-layer"></div>
-                <button type="submit" name="add">Add</button>
+                <button type="submit" name="add" onsubmit="return validateForm()">Add</button>
             </div>
         </form>
     </div>
@@ -76,5 +84,19 @@ if(isset($_POST["add"])){
     function goBack() {
         window.history.back();
     }
+
+    function validateForm() {
+            var fileInput = document.getElementById('file');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Incorrect file type. Please upload only PNG, JPEG or JPG type files.');
+                fileInput.value = '';
+                return false;
+            }
+
+            return true;
+        }
 </script>
 </html>
