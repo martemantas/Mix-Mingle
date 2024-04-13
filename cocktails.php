@@ -28,7 +28,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="">Mix</a></li>';
             echo '<li><a href="">Surprise Me</a></li>';
             echo '<li><a href="">Search</a></li>';
-            if(!empty($_SESSION["id"]) && $row['role'] == 2 || 3){
+            if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
             }    
         echo '</ul>';
@@ -54,8 +54,6 @@ if(!empty($_SESSION["id"])){
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
 
-                        $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
-
                         if (empty($resultRow['picture'])) {
                             if(!empty($_SESSION["id"])){
                                 if($row['role'] > 1){
@@ -72,7 +70,8 @@ if(!empty($_SESSION["id"])){
                             }
                         }
                         else{
-                            if(empty($_SESSION["id"]) || $row['role'] > 1){
+                            $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
+                            if(!empty($_SESSION["id"]) && $row['role'] > 1){
                                 echo '<form method="post" action="deleteRecipe.php">';
                                     echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
                                     echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
@@ -81,7 +80,12 @@ if(!empty($_SESSION["id"])){
                                 echo '</form>';
                             }
                             else{
-                                echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
+                                echo '<form method="post" action="deleteRecipe.php">';
+                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
+                                    // echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '</div>';
+                                    echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                    echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1></div>';
+                                echo '</form>';
                             }
                         }
                     }

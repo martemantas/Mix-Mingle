@@ -143,7 +143,7 @@ for (let i = 0; i < 5; i++) {
                         var response = JSON.parse(xhr.responseText);
                         if (response.status === "success") {
                             updateStarsDisplay(filledStars);
-                            popUpDiv(response.message, 'confirmationMessage', 5000);
+                            popUpDiv(response.message, 'confirmationMessage', 3000);
             
                             if ('updatedTotalRating' in response) {
                                 modalRatingText.textContent = parseFloat(response.updatedTotalRating).toFixed(2);
