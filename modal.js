@@ -1,6 +1,7 @@
 var modal = document.getElementById('newModal');
 var modalContent = document.querySelector('.modal-content');
 var modalRating = modal.querySelector("#modalRatingStars");
+var modalRatingText = modal.querySelector("#modalRatingText");
 const reviewStars = document.getElementById('reviewStars');
 let filledStars = 0;
 
@@ -13,7 +14,6 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
     var modalImg = modal.querySelector("#modalImg");
     var modalName = modal.querySelector("#modalName");
     var modalDescription = modal.querySelector("#modalDescription");
-    var modalRatingNumber = modal.querySelector("#modalRatingText");
 
     modal.style.display = "block";
     if(imgSrc != 'undefined'){
@@ -21,10 +21,10 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
     }
     modalName.innerText = name;
     modalDescription.innerText = description;
-    modalRatingNumber.innerHTML = rating;
+    modalRatingText.innerHTML = rating;
     modalRating.innerHTML = '';
     if (rating == 0) {
-        modalRatingNumber.innerHTML = null;
+        modalRatingText.innerHTML = null;
         modalRating.innerText = "This recipe has no ratings";
         modalRating.classList.add('noStars');
     } else {
@@ -83,6 +83,9 @@ function closeModal() {
     modal.style.display = "none";
     modalContent.classList.remove('flipped');
     modalRating.classList.remove('noStars');
+
+    fetchRating(recipe_id, modalRatingText);
+    location.reload();
 }
 
 function flipCard() {
@@ -99,8 +102,31 @@ for (let i = 0; i < 5; i++) {
         fillStars(i);
     });
 
+    // GLITCHES WHEN HOVER FAST, BUG
     star.addEventListener('mouseleave', function () {
-        fillStars(filledStars - 1);
+        setTimeout(function() {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'getUserRating.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+    
+                        if (!isNaN(response.rating)) {
+                            fillStars(response.rating - 1);
+                        } else {
+                            console.error('Invalid rating value:', response);
+                        }
+                    } else {
+                        console.error('Failed to fetch user rating:', xhr.status);
+                    }
+                }
+            };
+    
+            var data = 'recipeId=' + recipe_id + '&userId=' + userId;
+            xhr.send(data);
+        }, 1000);
     });
 
     star.addEventListener('click', function () {
@@ -117,6 +143,31 @@ for (let i = 0; i < 5; i++) {
                     if (response.status === "success") {
                         updateStarsDisplay(filledStars);
                         alert(response.message);
+        
+                        if ('updatedTotalRating' in response) {
+                            modalRatingText.textContent = parseFloat(response.updatedTotalRating).toFixed(2);
+                            modalRating.innerHTML = '';
+                            var fullStars = Math.round(response.updatedTotalRating);
+                            if (fullStars == 0) {
+                                modalRatingText.innerHTML = null;
+                                modalRating.innerText = "This recipe has no ratings";
+                                modalRating.classList.add('noStars');
+                            } else {
+                                for (var i = 1; i <= fullStars; i++) {
+                                    var star = document.createElement('span');
+                                    star.classList.add('star', 'filled');
+                                    star.innerHTML = '&#9733;';
+                                    modalRating.appendChild(star);
+                                }
+                                var emptyStars = 5 - fullStars;
+                                for (var j = 0; j < emptyStars; j++) {
+                                    var emptyStar = document.createElement('span');
+                                    emptyStar.classList.add('star');
+                                    emptyStar.innerHTML = '&#9734;';
+                                    modalRating.appendChild(emptyStar);
+                                }
+                            }
+                        }
                     } else {
                         console.error('Failed to submit rating:', response.message);
                     }
@@ -145,9 +196,9 @@ function updateStarsDisplay(filledStars) {
     const stars = document.querySelectorAll('.reviewStar');
     stars.forEach((star, index) => {
         if (index < filledStars) {
-            star.innerHTML = '&#9733;'; // Filled star
+            star.innerHTML = '&#9733;';
         } else {
-            star.innerHTML = '&#9734;'; // Empty star
+            star.innerHTML = '&#9734;';
         }
     });
 }
@@ -218,4 +269,28 @@ function displayRecipeSteps(recipeSteps) {
     });
 
     recipeStepsDiv.appendChild(ol);
+}
+
+function fetchRating(recipeId, modalRatingText) {
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST', 'getUserRating.php', true);
+    xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === XMLHttpRequest.DONE) {
+            if (xhr.status === 200) {
+                var response = JSON.parse(xhr.responseText);
+                if (!isNaN(response.rating)) {
+                    modalRatingText.innerHTML = parseFloat(response.rating);
+                    console.log(modalRatingText.innerHTML);
+                } else {
+                    console.error('Invalid rating value:', response);
+                }
+            } else {
+                console.error('Failed to fetch user rating:', xhr.status);
+            }
+        }
+    };
+
+    var data = 'recipeId=' + recipe_id + '&userId=' + userId;
+    xhr.send(data);
 }
