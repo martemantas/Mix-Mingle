@@ -42,7 +42,7 @@ if(!empty($_SESSION["id"])){
             echo '<li class="login"><a href="login.php">Login</a></li>';
         }
         else{
-            echo '<li class="login"><a href="logout.php">Logout</a></li>';
+            echo '<li class="login"><a href="logout.php" style="color: red;">Logout</a></li>';
         }
     echo '</nav>';
 ?>

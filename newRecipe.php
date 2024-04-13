@@ -11,9 +11,41 @@ if(isset($_POST["add"])){
     $description = $_POST["description"];
     $category = $_POST["category_id"];
 
-    $query = "INSERT INTO recipe VALUES('', '$name', '$description', '', '$user', '', '$category')";
+    if (empty($name) || empty($description)) {
+        echo "<script>alert('Please fill in all the fields.')</script>";
+    }
+
+    $filename = basename($_FILES["file"]["name"]);
+    $target_file = $filename;
+    $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
+
+    // Insert new recipe into the database
+    $insertRecipe = "INSERT INTO `recipe` (`name`, `description`, `picture`, `creator`, `category`) VALUES (?, ?, ?, ?, ?)";
+    $stmt = $conn->prepare($insertRecipe);
+    $stmt->bind_param("ssssi", $name, $description, $fileType, $user, $category);
+
+    if ($stmt->execute()) {
+        $recipeID = $stmt->insert_id;
+
+        // Save uploaded picture in recipes folder
+        $targetFolder = "recipes/";
+        $targetFile = $targetFolder . $recipeID . "." . $fileType;
+        
+        if (move_uploaded_file($_FILES['file']['tmp_name'], $targetFile)) {
+            echo "<script>alert('Recipe added.')</script>";
+        } else {
+           echo "<script>alert('Failed to save the picture.')</script>";
+           $queryDelete = "DELETE FROM `recipe` WHERE `recipe`.`recipe_id` ='$recipeID'";
+           $result = $conn->query($queryDelete);
+        }
+   } else {
+        echo "<script>alert('Recipe already exists.')</script>";
+   }
+
+    /*$query = "INSERT INTO recipe VALUES('', '$name', '$description', '', '$user', '', '$category')";
            mysqli_query($conn,$query);
-           echo "<script>alert('Recipe has been saved')</script>";
+           echo "<script>alert('Recipe has been saved')</script>";*/
+
 }
 ?>
 <!DOCTYPE html>
@@ -40,16 +72,19 @@ if(isset($_POST["add"])){
     ?>
     <div class="container">
         <h1 class="title">New recipe</h1>
-        <form action="" method="POST">
+        <form action="" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="field">
-                <input type="text" name="name" placeholder="Recipe name">
+                <input type="text" name="name" placeholder="Recipe name" required>
             </div>
             <div class="field">
-                <input type="text" name="description" placeholder="Recipe description">
+                <input type="text" name="description" placeholder="Recipe description" required>
             </div>
+
             <div class="gap">
-                <input class="form-control" type="file" name="uploadfile" value="" />
+                <label style = "margin-left:10px" for="file">Upload recipe photo:</label>
+                <input type="file" name="file" id="file" accept="image/png, image/jpeg, image/jpg" required>
             </div>
+
             <div class="field">
                 <select name="category_id">
                     <?php
@@ -64,10 +99,11 @@ if(isset($_POST["add"])){
 
             <div class="field btn">
                 <div class="btn-layer"></div>
-                <button type="submit" name="add">Add</button>
+                <button type="submit" name="add" >Add</button>
             </div>
         </form>
     </div>
+    
     <footer style="position:fixed; bottom:0;">
         <p style="border-top: none;">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>
     </footer>
@@ -76,5 +112,19 @@ if(isset($_POST["add"])){
     function goBack() {
         window.history.back();
     }
+
+    function validateForm() {
+            var fileInput = document.getElementById('file');
+            var filePath = fileInput.value;
+            var allowedExtensions = /(\.jpg|\.jpeg|\.png)$/i;
+
+            if (!allowedExtensions.exec(filePath)) {
+                alert('Incorrect file type. Please upload only PNG, JPEG or JPG type files.');
+                fileInput.value = '';
+                return false;
+            }
+
+            return true;
+        }
 </script>
 </html>
