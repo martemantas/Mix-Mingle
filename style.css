@@ -234,6 +234,47 @@ section{
     cursor: pointer;
 }
 
+/* Messages */
+
+.confirmationMessage,
+.loginSuggestion {
+    width: 200px;
+    height: 100px;
+    z-index: 99;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #333;
+    font-weight: bold;
+    color: white;
+    display: flex;
+    align-items: center;
+    text-align: center;
+}
+.loginSuggestion{
+    flex-direction: column;
+    height: 150px;
+    background-color: #fff;
+    font-size: 20px;
+    color: #333;
+    border-radius: 16px;
+    /* justify-content: space-around; */
+    padding: 30px 10px;
+}
+.loginSuggestion .closeButton{
+    top: 0%;
+    right: 0%;
+    cursor: pointer;
+    position: absolute;
+    font-size: 32px;
+    padding: 0 10px;
+}
+.loginSuggestion a{
+    text-decoration: none;
+    padding-top: 20px;
+}
+
 /* Errors */
 
 .search-error{
