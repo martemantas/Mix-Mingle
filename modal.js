@@ -318,7 +318,7 @@ function popUpDiv(text, style, time){
         messageDiv.appendChild(closeButton);
 
         var loginLink = document.createElement('a');
-        loginLink.textContent = 'Here';
+        loginLink.textContent = 'Click here';
         loginLink.setAttribute('href', 'login.php');
         messageDiv.appendChild(loginLink);
 
