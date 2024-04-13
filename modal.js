@@ -132,53 +132,58 @@ for (let i = 0; i < 5; i++) {
     star.addEventListener('click', function () {
         filledStars = i + 1;
     
-        var xhr = new XMLHttpRequest();
-        xhr.open('POST', 'calculateRating.php', true);
-    
-        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-        xhr.onreadystatechange = function () {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.status === "success") {
-                        updateStarsDisplay(filledStars);
-                        alert(response.message);
+        if(userId) {
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', 'calculateRating.php', true);
         
-                        if ('updatedTotalRating' in response) {
-                            modalRatingText.textContent = parseFloat(response.updatedTotalRating).toFixed(2);
-                            modalRating.innerHTML = '';
-                            var fullStars = Math.round(response.updatedTotalRating);
-                            if (fullStars == 0) {
-                                modalRatingText.innerHTML = null;
-                                modalRating.innerText = "This recipe has no ratings";
-                                modalRating.classList.add('noStars');
-                            } else {
-                                for (var i = 1; i <= fullStars; i++) {
-                                    var star = document.createElement('span');
-                                    star.classList.add('star', 'filled');
-                                    star.innerHTML = '&#9733;';
-                                    modalRating.appendChild(star);
-                                }
-                                var emptyStars = 5 - fullStars;
-                                for (var j = 0; j < emptyStars; j++) {
-                                    var emptyStar = document.createElement('span');
-                                    emptyStar.classList.add('star');
-                                    emptyStar.innerHTML = '&#9734;';
-                                    modalRating.appendChild(emptyStar);
+            xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === XMLHttpRequest.DONE) {
+                    if (xhr.status === 200) {
+                        var response = JSON.parse(xhr.responseText);
+                        if (response.status === "success") {
+                            updateStarsDisplay(filledStars);
+                            popUpDiv(response.message, 'confirmationMessage', 5000);
+            
+                            if ('updatedTotalRating' in response) {
+                                modalRatingText.textContent = parseFloat(response.updatedTotalRating).toFixed(2);
+                                modalRating.innerHTML = '';
+                                var fullStars = Math.round(response.updatedTotalRating);
+                                if (fullStars == 0) {
+                                    modalRatingText.innerHTML = null;
+                                    modalRating.innerText = "This recipe has no ratings";
+                                    modalRating.classList.add('noStars');
+                                } else {
+                                    for (var i = 1; i <= fullStars; i++) {
+                                        var star = document.createElement('span');
+                                        star.classList.add('star', 'filled');
+                                        star.innerHTML = '&#9733;';
+                                        modalRating.appendChild(star);
+                                    }
+                                    var emptyStars = 5 - fullStars;
+                                    for (var j = 0; j < emptyStars; j++) {
+                                        var emptyStar = document.createElement('span');
+                                        emptyStar.classList.add('star');
+                                        emptyStar.innerHTML = '&#9734;';
+                                        modalRating.appendChild(emptyStar);
+                                    }
                                 }
                             }
+                            modalRating.classList.remove('noStars');
+                        } else {
+                            console.error('Failed to submit rating:', response.message);
                         }
                     } else {
-                        console.error('Failed to submit rating:', response.message);
+                        console.error('Failed to submit rating:', xhr.status);
                     }
-                } else {
-                    console.error('Failed to submit rating:', xhr.status);
                 }
-            }
-        };
-    
-        var data = 'filledStars=' + filledStars + '&recipeId=' + recipe_id + '&userId=' + userId;
-        xhr.send(data);
+            };
+        
+            var data = 'filledStars=' + filledStars + '&recipeId=' + recipe_id + '&userId=' + userId;
+            xhr.send(data);
+        } else {
+            popUpDiv("User not found Please login",'loginSuggestion');
+        }
     });
 }
 
@@ -293,4 +298,32 @@ function fetchRating(recipeId, modalRatingText) {
 
     var data = 'recipeId=' + recipe_id + '&userId=' + userId;
     xhr.send(data);
+}
+
+function popUpDiv(text, style, time){
+    var messageDiv = document.createElement('div');
+    messageDiv.textContent = text;
+    messageDiv.classList.add(style);
+    document.body.appendChild(messageDiv);
+
+    if(time){
+        setTimeout(function () {
+            document.body.removeChild(messageDiv);
+        }, time);
+    }
+    else{
+        var closeButton = document.createElement('span');
+        closeButton.innerHTML = '&times;';
+        closeButton.classList.add('closeButton');
+        messageDiv.appendChild(closeButton);
+
+        var loginLink = document.createElement('a');
+        loginLink.textContent = 'Here';
+        loginLink.setAttribute('href', 'login.php');
+        messageDiv.appendChild(loginLink);
+
+        closeButton.addEventListener('click', function () {
+            document.body.removeChild(messageDiv);
+        });
+    }
 }
