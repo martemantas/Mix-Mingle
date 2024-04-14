@@ -54,14 +54,17 @@ if(!empty($_SESSION["id"])){
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
 
+                        // Check if recipe has picture
                         if (empty($resultRow['picture'])) {
+                            // Check if user is logged in
                             if(!empty($_SESSION["id"])){
+                                // Check if user is admin or editor 
                                 if($row['role'] > 1){
                                     echo '<form method="post" action="deleteRecipe.php">';
                                         echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
                                     echo '</form>';
                                 }
-                                else{
+                                else {
                                     echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">' . $resultRow['name'] . '</div>';
                                 }
                             }
@@ -71,21 +74,27 @@ if(!empty($_SESSION["id"])){
                         }
                         else{
                             $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
-                            if(!empty($_SESSION["id"]) && $row['role'] > 1){
-                                echo '<form method="post" action="deleteRecipe.php">';
-                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
-                                    echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
-                                    echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
-                                    echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
-                                echo '</form>';
-                            }
-                            else{
-                                echo '<form method="post" action="deleteRecipe.php">';
-                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
-                                    // echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '</div>';
+                            // Check if user is logged in
+                            if(!empty($_SESSION["id"])){
+                                // Check if user is admin or editor 
+                                if($row['role'] > 1){
+                                    echo '<form method="post" action="deleteRecipe.php">';
+                                        echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
+                                        echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                        echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
+                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                    echo '</form>';
+                                }
+                                else {
+                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
                                     echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
                                     echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1></div>';
-                                echo '</form>';
+                                }
+                            }
+                            else{
+                                echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
+                                echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1></div>';
                             }
                         }
                     }
