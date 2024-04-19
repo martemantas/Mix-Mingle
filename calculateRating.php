@@ -29,7 +29,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $response["message"] = "Failed to insert rating: " . mysqli_error($conn);
         } else {
             $response["status"] = "success";
-            $response["message"] = "Thank you for your opinion!";
+            $response["message"] = "Thank you for leaving a review!";
         }
     }
 

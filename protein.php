@@ -26,7 +26,7 @@ if(!empty($_SESSION["id"])){
         echo '<ul>';
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="">Mix</a></li>';
-            echo '<li><a href="">Surprise Me</a></li>';
+            echo '<li><a href="surprise.php">Surprise Me</a></li>';
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
@@ -54,17 +54,46 @@ if(!empty($_SESSION["id"])){
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
                         if (empty($resultRow['picture'])) {
-                            if(empty($_SESSION["id"]) || $row['role'] > 1){
-                                echo '<form method="post" action="deleteRecipe.php">';
-                                    echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
-                                echo '</form>';
+                            // Check if user is logged in
+                            if(!empty($_SESSION["id"])){
+                                // Check if user is admin or editor 
+                                if($row['role'] > 1){
+                                    echo '<form method="post" action="deleteRecipe.php">';
+                                        echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">' . $resultRow['name'] . '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                    echo '</form>';
+                                }
+                                else {
+                                    echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">' . $resultRow['name'] . '</div>';
+                                }
                             }
                             else{
-                                echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['rating'] .'\')">' . $resultRow['name'] . '</div>';
+                                echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">' . $resultRow['name'] . '</div>';
                             }
                         }
                         else{
-                            //to do picture instead of name
+                            $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
+                            // Check if user is logged in
+                            if(!empty($_SESSION["id"])){
+                                // Check if user is admin or editor 
+                                if($row['role'] > 1){
+                                    echo '<form method="post" action="deleteRecipe.php">';
+                                        echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
+                                        echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                        echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
+                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                    echo '</form>';
+                                }
+                                else {
+                                    echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
+                                    echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                    echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1></div>';
+                                }
+                            }
+                            else{
+                                echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
+                                echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1></div>';
+                            }
                         }
                     }
                 } else {
@@ -93,7 +122,6 @@ if(!empty($_SESSION["id"])){
                 <div class="leave-rating">
                     <p>Leave a review</p>
                     <div id="reviewStars" class="stars"></div>
-                    <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
                 </div>
             </div> 
             <div id="recipeSteps"></div>

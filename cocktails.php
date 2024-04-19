@@ -26,7 +26,7 @@ if(!empty($_SESSION["id"])){
         echo '<ul>';
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="">Mix</a></li>';
-            echo '<li><a href="">Surprise Me</a></li>';
+            echo '<li><a href="surprise.php">Surprise Me</a></li>';
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
@@ -127,7 +127,6 @@ if(!empty($_SESSION["id"])){
                 <div class="leave-rating">
                     <p>Leave a review</p>
                     <div id="reviewStars" class="stars"></div>
-                    <!-- ADD PHP for 'thanks for leaving a review' + only logged users, call leaveReview.php get back to the page -->
                 </div>
             </div> 
             <div class="right-side">
