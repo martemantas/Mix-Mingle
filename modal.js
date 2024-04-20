@@ -23,7 +23,7 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
     modalDescription.innerText = description;
     modalRatingText.innerHTML = rating;
     modalRating.innerHTML = '';
-    if (rating == 0) {
+    if (rating == 0 || rating == null) {
         modalRatingText.innerHTML = null;
         modalRating.innerText = "This recipe has no ratings";
         modalRating.classList.add('noStars');
@@ -131,7 +131,6 @@ for (let i = 0; i < 5; i++) {
 
     star.addEventListener('click', function () {
         filledStars = i + 1;
-    
         if(userId) {
             var xhr = new XMLHttpRequest();
             xhr.open('POST', 'calculateRating.php', true);

@@ -5,9 +5,6 @@ if(!empty($_SESSION["id"])){
     $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$sessionID'");
     $row = mysqli_fetch_assoc($result);
 }
-// else{
-//     header("Location: login.php");
-// }
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -29,7 +26,7 @@ if(!empty($_SESSION["id"])){
         echo '<ul>';
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="">Mix</a></li>';
-            echo '<li><a href="surprise.html">Surprise Me</a></li>';
+            echo '<li><a href="surprise.php">Surprise Me</a></li>';
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
@@ -47,27 +44,53 @@ if(!empty($_SESSION["id"])){
     echo '</nav>';
 ?>
     <div class="surpriseContainer">
-        <button id="randomRecipeButton">Get me a random Recipe</button>
+        <button id="randomRecipeButton" onclick="fetchRandomRecipe()">Get me a random Recipe</button>
         <div id="recipeContainer"></div>
     </div>
-    <button id="nextRecipeButton" class="hidden">Perhaps another?</button>
+    <button id="nextRecipeButton" class="hidden" onclick="fetchRandomRecipe()">Perhaps another?</button>
+
+    <div id="newModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImg">
+            <div class="modalInfo">
+                <h2 id="modalName"></h2>
+                <p id="modalDescription"></p>
+                <div class="modalRating">
+                    <p id="modalRatingText"></p>
+                    <div id="modalRatingStars" class="stars"></div>
+                </div>
+                <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
+            </div>
+            <div class="left-side">
+                <div class="ingredients">
+                    <h2 class="backSideTitle">Ingredients</h2>
+                    <div id="ingredients"></div>
+                </div>
+                <div class="leave-rating">
+                    <p>Leave a review</p>
+                    <div id="reviewStars" class="stars"></div>
+                </div>
+            </div> 
+            <div class="right-side">
+                <h2 class="backSideTitle">How to make it</h2>
+                <div id="recipeSteps">
+            </div>
+            </div>
+            <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
+        </div>
+    </div>
 
     <footer>
         <p style="border-top: none;">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>
     </footer>
 </body>
+<script src="modal.js"></script>
 <script>
-document.getElementById('randomRecipeButton').addEventListener('click', function() {
-    fetchRandomRecipe();
-});
-
-document.getElementById('nextRecipeButton').addEventListener('click', function() {
-    fetchRandomRecipe();
-});
-
 function fetchRandomRecipe() {
     var recipeContainer = document.getElementById('recipeContainer');
     recipeContainer.innerHTML = '';
+    document.getElementById('nextRecipeButton').classList.add('hidden');
 
     var xhr = new XMLHttpRequest();
     xhr.open('GET', 'getRandomRecipe.php', true);
@@ -85,40 +108,37 @@ function fetchRandomRecipe() {
 }
 
 function displayRecipe(recipe) {
-            var randomRecipeButton = document.getElementById('randomRecipeButton');
-            var recipeContainer = document.getElementById('recipeContainer');
-            var nextRecipeButton = document.getElementById('nextRecipeButton');
+    var randomRecipeButton = document.getElementById('randomRecipeButton');
+    var recipeContainer = document.getElementById('recipeContainer');
+    var nextRecipeButton = document.getElementById('nextRecipeButton');
+    var user = <?php echo json_encode($sessionID); ?>;
 
-            var recipeCard = document.createElement('div');
-            recipeCard.classList.add('random-card');
-            randomRecipeButton.classList.add('hidden');
-            nextRecipeButton.classList.remove('hidden');
+    var recipeCard = document.createElement('div');
+    recipeCard.classList.add('random-card');
+    randomRecipeButton.classList.add('hidden');
+    nextRecipeButton.classList.remove('hidden');
 
-            var recipeLink = document.createElement('a');
-            if (recipe.category === 1) {
-                recipeLink.href = 'cocktails.php?id=' + recipe.recipe_id;
-            } else if (recipe.category === 2) {
-                recipeLink.href = 'smoothies.php?id=' + recipe.recipe_id;
-            } else {
-                recipeLink.href = 'protein.php?id=' + recipe.recipe_id;
-            }
+    var recipeName = document.createElement('h2');
+    recipeName.textContent = recipe.name;
+    recipeCard.appendChild(recipeName);
 
-            var recipeName = document.createElement('h2');
-            recipeName.textContent = recipe.name;
-            recipeLink.appendChild(recipeName);
+    var recipeImage = document.createElement('img');
+    recipeImage.src = "recipes/" + recipe.recipe_id + "." + recipe.picture;
+    recipeImage.alt = recipe.name;
+    recipeCard.appendChild(recipeImage);
 
-            var recipeImage = document.createElement('img');
-            recipeImage.src = "recipes/" + recipe.recipe_id + "." + recipe.picture;
-            recipeImage.alt = recipe.name;
-            recipeLink.appendChild(recipeImage);
+    recipeCard.addEventListener('click', function(event) {
+        event.preventDefault();
+        openModal(recipe.recipe_id, recipeImage.src, recipe.name, recipe.description, recipe.total_rating, <?php echo json_encode($sessionID); ?>);
+    });
+    
+    recipeContainer.appendChild(recipeCard);
+}
 
-            recipeLink.addEventListener('click', function(event) {
-                event.preventDefault();
-                window.location.href = recipeLink.href;
-            });
-
-            recipeCard.appendChild(recipeLink);
-            recipeContainer.appendChild(recipeCard);
-        }
+function closeModal() {
+    modal.style.display = "none";
+    modalContent.classList.remove('flipped');
+    modalRating.classList.remove('noStars');
+}
 </script>
 </html>
