@@ -68,7 +68,7 @@ if(isset($_POST["submitsignup"])){
          echo '<ul>';
                echo '<li><a href="home.php">Home</a></li>';
                echo '<li><a href="">Mix</a></li>';
-               echo '<li><a href="">Surprise Me</a></li>';
+               echo '<li><a href="surprise.php">Surprise Me</a></li>';
                echo '<li><a href="">Search</a></li>';
          echo '</ul>';
          echo '<li class="login"><a href="login.php">Login</a></li>';
