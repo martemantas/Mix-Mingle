@@ -5,6 +5,9 @@ if(!empty($_SESSION["id"])){
     $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$sessionID'");
     $row = mysqli_fetch_assoc($result);
 }
+else{
+    $sessionID = null;
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
