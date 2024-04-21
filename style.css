@@ -417,9 +417,20 @@ section{
     overflow-y: auto;
     display: grid;
 }
+.modalFavorite{
+    display: flex;
+    align-items: center;
+}
+.modalFavorite .heart-icon{
+    font-size: 48px;
+    padding-top: 20px;
+    cursor: pointer; 
+    color: gray;
+}
 .modalInfo #modalName{
     font-size: 32px;
     padding-top: 20px;
+    margin-right: 10px;
 }
 .modalRating {
     text-align: center;
@@ -519,6 +530,9 @@ section{
 }
 .noStars{
     font-size: 16px;
+}
+.heart-icon.clicked {
+    color: red;
 }
 
 /* Buttons */

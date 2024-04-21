@@ -111,7 +111,10 @@ if(!empty($_SESSION["id"])){
             <span class="close" onclick="closeModal()">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
-                <h2 id="modalName"></h2>
+                <div class="modalFavorite">
+                    <h2 id="modalName"></h2>
+                    <span class="heart-icon">&#10084;</span>
+                </div>
                 <p id="modalDescription"></p>
                 <div class="modalRating">
                     <p id="modalRatingText"></p>
