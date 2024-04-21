@@ -14,6 +14,7 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
     var modalImg = modal.querySelector("#modalImg");
     var modalName = modal.querySelector("#modalName");
     var modalDescription = modal.querySelector("#modalDescription");
+    var modalFavorite = modal.querySelector(".modalFavorite");
 
     modal.style.display = "block";
     if(imgSrc != 'undefined'){
@@ -68,6 +69,25 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
     var data = 'recipeId=' + recipe_id + '&userId=' + userId;
     xhr.send(data);
 
+    var xhrCheckFavorite = new XMLHttpRequest();
+    xhrCheckFavorite.open('POST', 'manageFavorites.php', true);
+    xhrCheckFavorite.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+    xhrCheckFavorite.onreadystatechange = function () {
+        if (xhrCheckFavorite.readyState === XMLHttpRequest.DONE) {
+            if (userId){
+                if (xhrCheckFavorite.status === 200) {
+                    var response = JSON.parse(xhrCheckFavorite.responseText);
+                    if (response.isFavorite) {
+                        modalFavorite.querySelector('.heart-icon').classList.add('clicked');
+                    }
+                } else {
+                    console.error('Failed to check favorite status:', xhrCheckFavorite.status);
+                }
+            }
+        } 
+    };
+    xhrCheckFavorite.send('check=' + recipe_id + '&userId=' + userId);
+
     loadIngredients(recipeId);
     loadRecipeSteps(recipeId);
 }
@@ -75,17 +95,19 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
 document.getElementById('newModal').addEventListener('click', function(event) {
     var modalContent = document.querySelector('.modal-content');
     if (!modalContent.contains(event.target)) {
-        closeModal();
+        closeModal(false);
     }
 });
 
-function closeModal() {
+function closeModal(close) {
     modal.style.display = "none";
     modalContent.classList.remove('flipped');
     modalRating.classList.remove('noStars');
 
     fetchRating(recipe_id, modalRatingText);
-    location.reload();
+    if(close){
+        location.reload();
+    }
 }
 
 function flipCard() {
@@ -285,7 +307,6 @@ function fetchRating(recipeId, modalRatingText) {
                 var response = JSON.parse(xhr.responseText);
                 if (!isNaN(response.rating)) {
                     modalRatingText.innerHTML = parseFloat(response.rating);
-                    console.log(modalRatingText.innerHTML);
                 } else {
                     console.error('Invalid rating value:', response);
                 }
@@ -326,3 +347,36 @@ function popUpDiv(text, style, time){
         });
     }
 }
+
+document.querySelectorAll('.heart-icon').forEach(function(heartIcon) {
+    heartIcon.addEventListener('click', function() {
+        var isFavorite = this.classList.contains('clicked');
+
+
+        if (!userId) {
+            popUpDiv("User not found. Please login.", 'loginSuggestion');
+            return;
+        }
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', 'manageFavorites.php', true);
+        xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var response = xhr.responseText;
+                    console.log(response);
+                } else {
+                    console.error('Failed to manage favorites:', xhr.status);
+                }
+            }
+        };
+
+        if (isFavorite) {
+            xhr.send('remove=' + recipe_id + '&userId=' + userId);
+            heartIcon.classList.remove('clicked');
+        } else {
+            xhr.send('add=' + recipe_id + '&userId=' + userId);
+            heartIcon.classList.add('clicked');
+        }
+    });
+});

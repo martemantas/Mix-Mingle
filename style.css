@@ -130,13 +130,11 @@ section{
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
     gap: 75px;
-    padding: 0 0 25px 0;
     margin-top: 75px;
     overflow-x: hidden;
-    /* box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5); */
     box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5) inset, 0px -8px 10px -10px rgba(0, 0, 0, 0.5) inset;
     height: 100vh;
-    padding: 10px 40px 10px 10px;
+    padding: 15px 40px 15px 10px;
     position: relative;
 }
 
@@ -196,8 +194,12 @@ section{
 
 /* Search bar */
   
-.searchBar{
+.search{
     position: relative;
+    height: 25px;
+}
+.searchBar, .searchButtons{
+    position: absolute;
     width: 330px;
     height: 20px;
     margin-top: 20px;
@@ -220,7 +222,7 @@ section{
     font-weight: normal;
     font-style: italic;
 } 
-.searchBar button {
+.searchBar button, .searchButtons button{
     height: 100%;
     padding: 20px;
     border-radius: 20px;
@@ -233,6 +235,12 @@ section{
     justify-content: center;
     align-items: center;
     cursor: pointer;
+}
+.searchBar button:hover, .searchButtons button:hover{
+    background-color: #c4191f;
+}
+.searchButtons{
+    width: 100%;
 }
 
 /* Messages */
@@ -417,9 +425,20 @@ section{
     overflow-y: auto;
     display: grid;
 }
+.modalFavorite{
+    display: flex;
+    align-items: center;
+}
+.modalFavorite .heart-icon{
+    font-size: 48px;
+    padding-top: 20px;
+    cursor: pointer; 
+    color: gray;
+}
 .modalInfo #modalName{
     font-size: 32px;
     padding-top: 20px;
+    margin-right: 10px;
 }
 .modalRating {
     text-align: center;
@@ -519,6 +538,9 @@ section{
 }
 .noStars{
     font-size: 16px;
+}
+.heart-icon.clicked {
+    color: red;
 }
 
 /* Buttons */
@@ -642,7 +664,7 @@ footer p {
         padding: 0;
     }
     .drink-cards{
-        gap: 25px;
+        gap: 35px;
     }
     .drink-card{
         height: 180px;

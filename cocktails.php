@@ -43,13 +43,22 @@ if(!empty($_SESSION["id"])){
     <section>
         <div class="search-view">
             <h1>Alcoholic cocktails for your taste!</h1>
-            <form class="searchBar"> <!-- form should have a name -->
-                <input type="text" placeholder="What are you looking for?" required>
-                <button type="submit">Search</button>
-            </form>
+            <div class="search">
+                <form class="searchBar"> <!-- form should have a name -->
+                    <input type="text" placeholder="What are you looking for?" required>
+                    <button type="submit">Search</button>
+                </form>
+                <div class="searchButtons">
+                    <button id="favoriteButton">Favorite</button>
+                </div>
+            </div>
             <div class="drink-cards">
             <?php
-                $result = mysqli_query($conn, "SELECT * FROM recipe WHERE category = 1");
+                $result = mysqli_query($conn, "SELECT r.*
+                FROM recipe r
+                JOIN users u ON r.creator = u.user_id
+                WHERE r.category = 1
+                AND u.role IN (2, 3);");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
@@ -108,10 +117,13 @@ if(!empty($_SESSION["id"])){
 
     <div id="newModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal(true)">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
-                <h2 id="modalName"></h2>
+                <div class="modalFavorite">
+                    <h2 id="modalName"></h2>
+                    <span class="heart-icon">&#10084;</span>
+                </div>
                 <p id="modalDescription"></p>
                 <div class="modalRating">
                     <p id="modalRatingText"></p>
@@ -182,5 +194,74 @@ if(!empty($_SESSION["id"])){
             }
         }
     });
+
+    function fetchRecipesByCategoryAndUser(categoryId, userId) {
+        var xhr = new XMLHttpRequest();
+        var url = 'fetchRecipes.php?category=' + categoryId + '&userId=' + userId;
+        xhr.open('GET', url, true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var recipes = JSON.parse(xhr.responseText);
+                    displayRecipes(recipes);
+                } else {
+                    console.error('Failed to fetch recipes:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send();
+    }
+
+    function displayRecipes(recipes) {
+    var recipesContainer = document.querySelector('.drink-cards');
+    recipesContainer.innerHTML = ''; 
+
+    if (recipes.length === 0) {
+        recipesContainer.textContent = 'No recipes found.';
+    } else {
+        recipes.forEach(function(recipe) {
+            var recipeCard = document.createElement('div');
+            recipeCard.classList.add('drink-card', 'alcoholic');
+
+            var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
+            var img = document.createElement('img');
+            img.src = imagePath;
+            img.alt = recipe.name;
+            recipeCard.appendChild(img);
+
+            var name = document.createElement('h1');
+            name.classList.add('recipe-name');
+            name.textContent = recipe.name;
+            recipeCard.appendChild(name);
+
+            recipesContainer.appendChild(recipeCard);
+            recipeCard.addEventListener('click', function() {
+                var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
+                openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+            });
+            closeModal(false);
+        });
+    }
+}
+
+    <?php if (!empty($_SESSION["id"])) { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            var categoryId = 1;
+            var userId = '<?php echo $sessionID; ?>';
+
+            fetchRecipesByCategoryAndUser(categoryId, userId);
+        });
+    });
+    <?php } else { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            popUpDiv("User not found Please login",'loginSuggestion');
+        });
+    });
+    <?php } ?>
+
 </script>
 </html>
