@@ -95,17 +95,19 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
 document.getElementById('newModal').addEventListener('click', function(event) {
     var modalContent = document.querySelector('.modal-content');
     if (!modalContent.contains(event.target)) {
-        closeModal();
+        closeModal(false);
     }
 });
 
-function closeModal() {
+function closeModal(close) {
     modal.style.display = "none";
     modalContent.classList.remove('flipped');
     modalRating.classList.remove('noStars');
 
     fetchRating(recipe_id, modalRatingText);
-    location.reload();
+    if(close){
+        location.reload();
+    }
 }
 
 function flipCard() {
@@ -305,7 +307,6 @@ function fetchRating(recipeId, modalRatingText) {
                 var response = JSON.parse(xhr.responseText);
                 if (!isNaN(response.rating)) {
                     modalRatingText.innerHTML = parseFloat(response.rating);
-                    console.log(modalRatingText.innerHTML);
                 } else {
                     console.error('Invalid rating value:', response);
                 }

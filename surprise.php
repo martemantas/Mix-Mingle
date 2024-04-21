@@ -54,7 +54,7 @@ else{
 
     <div id="newModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal(false)">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
                 <h2 id="modalName"></h2>
@@ -134,14 +134,10 @@ function displayRecipe(recipe) {
         event.preventDefault();
         openModal(recipe.recipe_id, recipeImage.src, recipe.name, recipe.description, recipe.total_rating, <?php echo json_encode($sessionID); ?>);
     });
+    closeModal(false);
     
     recipeContainer.appendChild(recipeCard);
 }
 
-function closeModal() {
-    modal.style.display = "none";
-    modalContent.classList.remove('flipped');
-    modalRating.classList.remove('noStars');
-}
 </script>
 </html>

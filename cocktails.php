@@ -117,7 +117,7 @@ if(!empty($_SESSION["id"])){
 
     <div id="newModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal(true)">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
                 <div class="modalFavorite">
@@ -216,13 +216,12 @@ if(!empty($_SESSION["id"])){
 
     function displayRecipes(recipes) {
     var recipesContainer = document.querySelector('.drink-cards');
-    recipesContainer.innerHTML = ''; // Clear previous content
+    recipesContainer.innerHTML = ''; 
 
     if (recipes.length === 0) {
         recipesContainer.textContent = 'No recipes found.';
     } else {
         recipes.forEach(function(recipe) {
-            // Create a new recipe card
             var recipeCard = document.createElement('div');
             recipeCard.classList.add('drink-card', 'alcoholic');
 
@@ -237,37 +236,12 @@ if(!empty($_SESSION["id"])){
             name.textContent = recipe.name;
             recipeCard.appendChild(name);
 
-            // Add delete button if the user is an admin or editor
-            // if (<?php echo $row['role']; ?> > 1) {
-            //     var deleteButton = document.createElement('button');
-            //     deleteButton.classList.add('delete');
-            //     deleteButton.value = recipe.recipe_id;
-            //     deleteButton.id = 'confirmButton';
-            //     deleteButton.textContent = '&times;';
-            //     deleteButton.addEventListener('click', function(event) {
-            //         event.stopPropagation();
-            //         var result = confirm('Are you sure you want to delete?');
-            //         if (result) {
-            //             var recipeId = event.target.value;
-            //             var xhr = new XMLHttpRequest();
-            //             xhr.open('POST', 'deleteRecipe.php', true);
-            //             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
-            //             xhr.onreadystatechange = function() {
-            //                 if (xhr.readyState === 4 && xhr.status === 200) {
-            //                     location.reload();
-            //                 }
-            //             };
-            //             xhr.send('recipe_id=' + recipeId);
-            //         }
-            //     });
-            //     recipeCard.appendChild(deleteButton);
-            // }
-
             recipesContainer.appendChild(recipeCard);
             recipeCard.addEventListener('click', function() {
                 var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
                 openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
             });
+            closeModal(false);
         });
     }
 }

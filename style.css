@@ -132,7 +132,6 @@ section{
     gap: 75px;
     margin-top: 75px;
     overflow-x: hidden;
-    /* box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5); */
     box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5) inset, 0px -8px 10px -10px rgba(0, 0, 0, 0.5) inset;
     height: 100vh;
     padding: 15px 40px 15px 10px;
@@ -665,7 +664,7 @@ footer p {
         padding: 0;
     }
     .drink-cards{
-        gap: 25px;
+        gap: 35px;
     }
     .drink-card{
         height: 180px;
