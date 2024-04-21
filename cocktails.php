@@ -43,13 +43,22 @@ if(!empty($_SESSION["id"])){
     <section>
         <div class="search-view">
             <h1>Alcoholic cocktails for your taste!</h1>
-            <form class="searchBar"> <!-- form should have a name -->
-                <input type="text" placeholder="What are you looking for?" required>
-                <button type="submit">Search</button>
-            </form>
+            <div class="search">
+                <form class="searchBar"> <!-- form should have a name -->
+                    <input type="text" placeholder="What are you looking for?" required>
+                    <button type="submit">Search</button>
+                </form>
+                <div class="searchButtons">
+                    <button id="favoriteButton">Favorite</button>
+                </div>
+            </div>
             <div class="drink-cards">
             <?php
-                $result = mysqli_query($conn, "SELECT * FROM recipe WHERE category = 1");
+                $result = mysqli_query($conn, "SELECT r.*
+                FROM recipe r
+                JOIN users u ON r.creator = u.user_id
+                WHERE r.category = 1
+                AND u.role IN (2, 3);");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
@@ -185,5 +194,100 @@ if(!empty($_SESSION["id"])){
             }
         }
     });
+
+    function fetchRecipesByCategoryAndUser(categoryId, userId) {
+        var xhr = new XMLHttpRequest();
+        var url = 'fetchRecipes.php?category=' + categoryId + '&userId=' + userId;
+        xhr.open('GET', url, true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var recipes = JSON.parse(xhr.responseText);
+                    displayRecipes(recipes);
+                } else {
+                    console.error('Failed to fetch recipes:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send();
+    }
+
+    function displayRecipes(recipes) {
+    var recipesContainer = document.querySelector('.drink-cards');
+    recipesContainer.innerHTML = ''; // Clear previous content
+
+    if (recipes.length === 0) {
+        recipesContainer.textContent = 'No recipes found.';
+    } else {
+        recipes.forEach(function(recipe) {
+            // Create a new recipe card
+            var recipeCard = document.createElement('div');
+            recipeCard.classList.add('drink-card', 'alcoholic');
+
+            var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
+            var img = document.createElement('img');
+            img.src = imagePath;
+            img.alt = recipe.name;
+            recipeCard.appendChild(img);
+
+            var name = document.createElement('h1');
+            name.classList.add('recipe-name');
+            name.textContent = recipe.name;
+            recipeCard.appendChild(name);
+
+            // Add delete button if the user is an admin or editor
+            // if (<?php echo $row['role']; ?> > 1) {
+            //     var deleteButton = document.createElement('button');
+            //     deleteButton.classList.add('delete');
+            //     deleteButton.value = recipe.recipe_id;
+            //     deleteButton.id = 'confirmButton';
+            //     deleteButton.textContent = '&times;';
+            //     deleteButton.addEventListener('click', function(event) {
+            //         event.stopPropagation();
+            //         var result = confirm('Are you sure you want to delete?');
+            //         if (result) {
+            //             var recipeId = event.target.value;
+            //             var xhr = new XMLHttpRequest();
+            //             xhr.open('POST', 'deleteRecipe.php', true);
+            //             xhr.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+            //             xhr.onreadystatechange = function() {
+            //                 if (xhr.readyState === 4 && xhr.status === 200) {
+            //                     location.reload();
+            //                 }
+            //             };
+            //             xhr.send('recipe_id=' + recipeId);
+            //         }
+            //     });
+            //     recipeCard.appendChild(deleteButton);
+            // }
+
+            recipesContainer.appendChild(recipeCard);
+            recipeCard.addEventListener('click', function() {
+                var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
+                openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+            });
+        });
+    }
+}
+
+    <?php if (!empty($_SESSION["id"])) { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            var categoryId = 1;
+            var userId = '<?php echo $sessionID; ?>';
+
+            fetchRecipesByCategoryAndUser(categoryId, userId);
+        });
+    });
+    <?php } else { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            popUpDiv("User not found Please login",'loginSuggestion');
+        });
+    });
+    <?php } ?>
+
 </script>
 </html>
