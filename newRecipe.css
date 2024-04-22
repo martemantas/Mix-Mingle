@@ -1,0 +1,96 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+// Tab
+
+.tab {
+    padding-top: 50px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+    background: #fff;
+    width: 100%;
+    margin: 0 auto;
+    font-family: 'Roboto', sans-serif;
+    line-height: 1.5;
+    font-weight: 300;
+    color: #888;
+    -webkit-font-smoothing: antialiased;
+}
+
+.tabs {
+    display: flex;
+    position: relative;
+    overflow: hidden;
+    margin: 0;
+    width: 100%;
+	height: auto;
+    padding: 0;
+}
+
+.tabs :hover{
+	scale: 1.01;
+}
+
+.tabs li {
+    flex: 1;
+    list-style: none;
+}
+
+.tabs a {
+    background-color: #dbdee1;
+    color: #5e5a5a;
+    font-weight: 500;
+    display: block;
+    text-align: center;
+    padding: 20px 0;
+    text-decoration: none;
+    transition: all 0.2s ease-in-out;
+    border-bottom: 2px solid transparent;
+}
+
+.tabs_item {
+    display: none;
+    padding: 30px 0;
+}
+
+.current a {
+    color: #fff;
+    background: #8FB79C;
+    border-bottom-color: #8FB79C;
+}
+
+// Tab items
+
+.tabs_item {
+    width: 100%;
+}
+
+.tabs_item h4 {
+    font-weight: bold;
+    color: blue;
+    font-size: 20px;
+}
+
+.tabs_item img {
+    width: 200px;
+    float: left;
+    margin-right: 30px;
+}
+
+.current .tabs_item {
+    display: block;
+}
+
+.instruction-input textarea {
+    resize: none;
+    box-sizing: border-box;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 6px 12px;
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}

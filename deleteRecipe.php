@@ -17,7 +17,17 @@
             $recipe = mysqli_fetch_assoc($findRecipe);
             $recipe['picture'] = "recipes/{$recipeId}.{$recipe['picture']}";
             unlink("{$recipe['picture']}");
-        }    
+        }
+
+        $deleteIngredients = "DELETE FROM ingredient WHERE fk_recipe_id = '$recipeId'";
+        if ($conn->query($deleteIngredients) === FALSE) { 
+            echo "Error deleting record: " . $conn->error;
+        }
+
+        $deleteInstructions = "DELETE FROM instruction WHERE fk_recipe_id = '$recipeId'";
+        if ($conn->query($deleteInstructions) === FALSE) { 
+            echo "Error deleting record: " . $conn->error;
+        }
 
         $deleteQuery = "DELETE from recipe where recipe_id = '$recipeId'";
         if ($conn->query($deleteQuery) === FALSE) { 
