@@ -82,11 +82,11 @@
 }
 
 .instruction-input textarea {
-    resize: none; /* Prevent resizing */
-    box-sizing: border-box; /* Include padding and border in the element's total width and height */
-    font-size: inherit; /* Inherit font size from parent */
-    line-height: inherit; /* Inherit line height from parent */
-    padding: 6px 12px; /* Adjust padding as needed */
+    resize: none;
+    box-sizing: border-box;
+    font-size: inherit;
+    line-height: inherit;
+    padding: 6px 12px;
 }
 
 input::-webkit-outer-spin-button,
