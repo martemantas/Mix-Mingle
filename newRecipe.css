@@ -1,6 +1,11 @@
 @import url(https://fonts.googleapis.com/css?family=Roboto:300);
 
-// Tab
+.container{
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Tab */
 
 .tab {
     padding-top: 50px;
@@ -59,7 +64,7 @@
     border-bottom-color: #8FB79C;
 }
 
-// Tab items
+/* Tab items */
 
 .tabs_item {
     width: 100%;
