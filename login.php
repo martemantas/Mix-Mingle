@@ -36,7 +36,7 @@ if(isset($_POST["submitsignup"])){
    else{
        if($password == $confirm_password){
            $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
-           $query = "INSERT INTO users VALUES('', '$name', '$password', '$email', '1')";
+           $query = "INSERT INTO users VALUES('', '$name', '$password', '$email', '1', NULL, NULL)";
            mysqli_query($conn,$query);
            echo "<script>alert('Sėkmingai užsiregistravote')</script>";
            //header("Location: login.php");
@@ -101,7 +101,7 @@ if(isset($_POST["submitsignup"])){
                      <input type="password" name="password" placeholder="Password" required>
                   </div>
                   <div class="pass-link">
-                     <a href="#">Forgot password?</a>
+                     <a href="forgot-password.php">Forgot password?</a>
                   </div>
                   <div class="field btn">
                      <div class="btn-layer"></div>

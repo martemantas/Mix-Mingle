@@ -38,31 +38,24 @@ require 'config.php';
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Check if user ID and role are set
     if (isset($_POST['id']) && isset($_POST['role'])) {
-        // Sanitize user inputs to prevent SQL injection
         $user_id = mysqli_real_escape_string($conn, $_POST['id']);
         $role = mysqli_real_escape_string($conn, $_POST['role']);
         
-        // Fetch user details for confirmation message
         $user_sql = "SELECT * FROM users WHERE user_id = '$user_id'";
         $user_result = mysqli_query($conn, $user_sql);
         $user_row = mysqli_fetch_assoc($user_result);
         
-        // Fetch role name from roles table
         $role_sql = "SELECT name FROM roles WHERE role_id = '$role'";
         $role_result = mysqli_query($conn, $role_sql);
         $role_row = mysqli_fetch_assoc($role_result);
         $role_name = $role_row['name'];
         
-        // Check if confirmation is submitted
         if (isset($_POST['confirm'])) {
-            // Update user's role in the database
             $update_sql = "UPDATE users SET role = '$role' WHERE user_id = '$user_id'";
             if (mysqli_query($conn, $update_sql)) {
-                // If update is successful, redirect back to admin.php
                 header("Location: admin.php");
                 exit();
             } else {
-                // If there is an error with the SQL query, display an error message
                 echo "Error updating record: " . mysqli_error($conn);
             }
         } else {
