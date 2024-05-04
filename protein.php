@@ -138,8 +138,10 @@ if(!empty($_SESSION["id"])){
                 echo '<h2><i>Let us know!</i></h2>';
             echo '</div>';
             echo '<div class="submit">';
-                echo '<input type="text">';
-                echo '<button>Send</button> ';
+                echo '<form method="post" action="suggestions.php">';
+                    echo '<input type="text" name="suggestion" placeholder="Enter your suggestion">';
+                    echo '<button type="submit">Send</button>';
+                echo '</form>';
             echo '</div>';
         echo '</div>';
         echo '<p>Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
