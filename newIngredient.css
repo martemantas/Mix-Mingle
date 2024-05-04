@@ -1,0 +1,57 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+/* Container */
+
+.container {
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+/* Site */
+
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    margin: 0px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: auto;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+
+th {
+    background-color: #f2f2f2;
+}
+
+form {
+    max-width: 300px;
+    margin: 10px auto;
+    text-align: left;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+}
+
+input, select {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 12px;
+}
+
+/* Mobile UI */
+
+@media only screen and (max-width: 600px) {
+    .container {
+        min-width: 300px;
+    }
+}
