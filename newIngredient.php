@@ -45,9 +45,7 @@ if(isset($_POST["add"])){
         if ($stmt->execute()) {
             echo "<script>alert('New ingredient added successfully')</script>";
 
-            // Fetch the updated ingredient list
-            $result = $conn->query($query);
-            $ingredientArray = $result->fetch_all(MYSQLI_ASSOC);
+            echo "<script>window.location.href = '$_SERVER[PHP_SELF]';</script>";
         }
     } catch (mysqli_sql_exception $e) {
         echo "<script>alert('Ingredient was not added. Duplicate name.')</script>";
