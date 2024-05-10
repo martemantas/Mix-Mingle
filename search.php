@@ -45,8 +45,8 @@ if(!empty($_SESSION["id"])){
         <div class="search-view">
             <h1>Any cocktails for your taste!</h1>
             <div class="search">
-                <form class="searchBar">
-                    <input type="text" id="searchInput" placeholder="What are you looking for?" required>
+                <form class="searchBar" id="searchForm">
+                    <input type="text" id="searchInput" placeholder="What are you looking for?">
                     <button type="submit">Search</button>
                 </form>
                 <div class="searchButtons">
@@ -173,82 +173,9 @@ if(!empty($_SESSION["id"])){
     </footer>
 </body>
 <script src="modal.js"></script>
+<script src="common.js"></script>
 <script>
-    document.addEventListener("click", function(event) {
-        if (event.target.classList.contains("delete")) {
-            var result = confirm("Are you sure you want to delete?");
-            if (!result) {
-                event.preventDefault();
-            } else {
-                var recipeId = event.target.value;
-                console.log(recipeId);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "deleteRecipe.php", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
-                    }
-                };
-                xhr.send("recipe_id=" + recipeId);
-            }
-        }
-    });
-
-    function fetchRecipesByCategoryAndUser(categoryId, userId) {
-        var xhr = new XMLHttpRequest();
-        var url = 'fetchRecipes.php?category=' + categoryId + '&userId=' + userId;
-        xhr.open('GET', url, true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var recipes = JSON.parse(xhr.responseText);
-                    displayRecipes(recipes);
-                } else {
-                    console.error('Failed to fetch recipes:', xhr.status);
-                }
-            }
-        };
-
-        xhr.send();
-    }
-
-    function displayRecipes(recipes) {
-        var recipesContainer = document.querySelector('.drink-cards');
-        recipesContainer.innerHTML = ''; 
-
-        if (recipes.length === 0) {
-            recipesContainer.textContent = 'No recipes found.';
-        } else {
-            recipes.forEach(function(recipe) {
-                var recipeCard = document.createElement('div');
-                recipeCard.classList.add('drink-card', 'alcoholic');
-
-                var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
-                var img = document.createElement('img');
-                img.src = imagePath;
-                img.alt = recipe.name;
-                recipeCard.appendChild(img);
-
-                var name = document.createElement('h1');
-                name.classList.add('recipe-name');
-                name.textContent = recipe.name;
-                recipeCard.appendChild(name);
-
-                recipesContainer.appendChild(recipeCard);
-                recipeCard.addEventListener('click', function() {
-                    var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
-                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
-                });
-                closeModal(false);
-            });
-        }
-    }
-
     <?php if (!empty($_SESSION["id"])) { ?>
-        console.log("User ID found: <?php echo $_SESSION["id"]; ?>");
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('favoriteButton').addEventListener('click', function() {
                 var categoryId = 1;
@@ -257,49 +184,24 @@ if(!empty($_SESSION["id"])){
                 fetchRecipesByCategoryAndUser(categoryId, userId);
             });
         });
-    <?php } else { ?>
-        console.log("User ID not found");
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById('favoriteButton').addEventListener('click', function() {
-                console.log("User not found");
-                popUpDiv("User not found Please login",'loginSuggestion');
-            });
+    <?php } 
+
+    else if (empty($_SESSION["id"]) || ($_SESSION["id"] == 0)) { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            popUpDiv("Guests don't have favorite recipes",'loginSuggestion');
         });
+    });
     <?php } ?>
 
     document.addEventListener("DOMContentLoaded", function() {
-    // Add event listener to the search form
         document.getElementById('searchForm').addEventListener('submit', function(event) {
-            // Prevent default form submission behavior
             event.preventDefault();
 
-            // Get the search query from the input field
             var searchQuery = document.getElementById('searchInput').value;
 
-            // Fetch recipes based on the search query
-            fetchRecipesBySearchQuery(searchQuery);
+            fetchRecipesBySearchQuery(searchQuery, 0);
         });
     });
-
-    function fetchRecipesBySearchQuery(searchQuery) {
-        // Send an AJAX request to the server with the search query
-        var xhr = new XMLHttpRequest();
-        var url = 'searchRecipes.php?query=' + encodeURIComponent(searchQuery); // Encode the search query
-        xhr.open('GET', url, true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var recipes = JSON.parse(xhr.responseText);
-                    displayRecipes(recipes);
-                } else {
-                    console.error('Failed to fetch recipes:', xhr.status);
-                }
-            }
-        };
-
-        xhr.send();
-    }
-
 </script>
 </html>

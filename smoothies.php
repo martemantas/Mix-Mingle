@@ -44,8 +44,8 @@ if(!empty($_SESSION["id"])){
         <div class="search-view">
             <h1>Smooties for your taste!</h1>
             <div class="search">
-                <form class="searchBar">
-                    <input type="text" placeholder="What are you looking for?" required>
+                <form class="searchBar" id="searchForm">
+                    <input type="text" id="searchInput" placeholder="What are you looking for?">
                     <button type="submit">Search</button>
                 </form>
                 <div class="searchButtons">
@@ -182,67 +182,8 @@ if(!empty($_SESSION["id"])){
     </footer>
 </body>
 <script src="modal.js"></script>
+<script src="common.js"></script>
 <script>
-    document.addEventListener("click", function(event) {
-        if (event.target.classList.contains("delete")) {
-            var result = confirm("Are you sure you want to delete?");
-            if (!result) {
-                event.preventDefault();
-            } else {
-                var recipeId = event.target.value;
-                console.log(recipeId);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "deleteRecipe.php", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
-                    }
-                };
-                xhr.send("recipe_id=" + recipeId);
-            }
-        }
-    });
-
-    function fetchRecipesByCategoryAndUser(categoryId, userId) {
-        var xhr = new XMLHttpRequest();
-        var url = 'fetchRecipes.php?category=' + categoryId + '&userId=' + userId;
-        xhr.open('GET', url, true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var recipes = JSON.parse(xhr.responseText);
-                    displayRecipes(recipes);
-                } else {
-                    console.error('Failed to fetch recipes:', xhr.status);
-                }
-            }
-        };
-
-        xhr.send();
-    }
-
-    function fetchSortedRecipes(categoryId, orderBy, orderDirection) {
-        var xhr = new XMLHttpRequest();
-        var url = 'sortRecipes.php?category=' + categoryId + '&orderBy=' + orderBy + '&orderDirection=' + orderDirection;
-        xhr.open('GET', url, true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var recipes = JSON.parse(xhr.responseText);
-                    displayRecipes(recipes);
-                } else {
-                    console.error('Failed to fetch recipes:', xhr.status);
-                }
-            }
-        };
-
-        xhr.send();
-    }
-
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('ascendingName').addEventListener('click', function() {
             fetchSortedRecipes(2, 'name', 'ASC');
@@ -261,43 +202,11 @@ if(!empty($_SESSION["id"])){
         });
     });
 
-    function displayRecipes(recipes) {
-        var recipesContainer = document.querySelector('.drink-cards');
-        recipesContainer.innerHTML = ''; 
-
-        if (recipes.length === 0) {
-            recipesContainer.textContent = 'No recipes found.';
-        } else {
-            recipes.forEach(function(recipe) {
-                var recipeCard = document.createElement('div');
-                recipeCard.classList.add('drink-card', 'alcoholic');
-
-                var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
-                var img = document.createElement('img');
-                img.src = imagePath;
-                img.alt = recipe.name;
-                recipeCard.appendChild(img);
-
-                var name = document.createElement('h1');
-                name.classList.add('recipe-name');
-                name.textContent = recipe.name;
-                recipeCard.appendChild(name);
-
-                recipesContainer.appendChild(recipeCard);
-                recipeCard.addEventListener('click', function() {
-                    var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
-                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, $_SESSION["id"]);
-                });
-                closeModal(false);
-            });
-        }
-    }
-
     <?php if (!empty($_SESSION["id"])) { ?>
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('favoriteButton').addEventListener('click', function() {
             var categoryId = 2;
-            var userId = $_SESSION["id"];
+            var userId = '<?php echo $sessionID; ?>';
 
             fetchRecipesByCategoryAndUser(categoryId, userId);
         });
@@ -311,5 +220,15 @@ if(!empty($_SESSION["id"])){
         });
     });
     <?php } ?>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var searchQuery = document.getElementById('searchInput').value;
+
+            fetchRecipesBySearchQuery(searchQuery, 2);
+        });
+    });
 </script>
 </html>
