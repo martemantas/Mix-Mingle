@@ -63,10 +63,16 @@ if(!empty($_SESSION["id"])){
             </div>
             <div class="drink-cards">
             <?php
-                $result = mysqli_query($conn, "SELECT * FROM recipe WHERE category = 3");
+                $result = mysqli_query($conn, "SELECT r.*
+                FROM recipe r
+                JOIN users u ON r.creator = u.user_id
+                WHERE r.category = 3
+                AND u.role IN (2, 3);");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
+                        
+                        // Check if recipe has picture
                         if (empty($resultRow['picture'])) {
                             // Check if user is logged in
                             if(!empty($_SESSION["id"])){
