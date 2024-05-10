@@ -27,7 +27,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="">Mix</a></li>';
             echo '<li><a href="surprise.php">Surprise Me</a></li>';
-            echo '<li><a href="">Search</a></li>';
+            echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
             }    
@@ -245,22 +245,18 @@ if(!empty($_SESSION["id"])){
 
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('ascendingName').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'name', 'ASC');
         });
 
         document.getElementById('descendingName').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'name', 'DESC');
         });
 
         document.getElementById('ascendingRating').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'total_rating', 'ASC');
         });
 
         document.getElementById('descendingRating').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'total_rating', 'DESC');
         });
     });
@@ -290,7 +286,7 @@ if(!empty($_SESSION["id"])){
                 recipesContainer.appendChild(recipeCard);
                 recipeCard.addEventListener('click', function() {
                     var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
-                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, $_SESSION["id"]);
                 });
                 closeModal(false);
             });
@@ -301,15 +297,17 @@ if(!empty($_SESSION["id"])){
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('favoriteButton').addEventListener('click', function() {
             var categoryId = 2;
-            var userId = '<?php echo $sessionID; ?>';
+            var userId = $_SESSION["id"];
 
             fetchRecipesByCategoryAndUser(categoryId, userId);
         });
     });
-    <?php } else { ?>
+    <?php } 
+
+    else if (empty($_SESSION["id"]) || ($_SESSION["id"] == 0)) { ?>
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('favoriteButton').addEventListener('click', function() {
-            popUpDiv("User not found Please login",'loginSuggestion');
+            popUpDiv("Guests don't have favorite recipes",'loginSuggestion');
         });
     });
     <?php } ?>
