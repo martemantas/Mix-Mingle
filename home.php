@@ -33,6 +33,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
+                echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }   
             if(!empty($_SESSION["id"]) && $row['role'] == 3){
                 echo '<li><a href="admin.php">Admin</a></li>';
