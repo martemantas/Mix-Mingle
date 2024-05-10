@@ -7,10 +7,10 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $category = $_GET["category"];
 
         if($category != 0){
-            $stmt = $conn->prepare("SELECT * FROM recipe WHERE name LIKE ? and category = $category");
+            $stmt = $conn->prepare("SELECT * FROM recipe WHERE name LIKE ? and category = $category order by name");
         }
         else{
-            $stmt = $conn->prepare("SELECT * FROM recipe WHERE name LIKE ?");
+            $stmt = $conn->prepare("SELECT * FROM recipe WHERE name LIKE ? order by name");
         }
         $searchParam = "%" . $searchQuery . "%";
         $stmt->bind_param("s", $searchParam);
@@ -25,4 +25,4 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo json_encode($recipes);
     }
 }
-?>
+

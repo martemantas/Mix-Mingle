@@ -67,7 +67,7 @@ if(!empty($_SESSION["id"])){
                 FROM recipe r
                 JOIN users u ON r.creator = u.user_id
                 WHERE r.category = 1
-                AND u.role IN (2, 3);");
+                AND u.role IN (2, 3) order by name;");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
@@ -225,8 +225,9 @@ if(!empty($_SESSION["id"])){
             event.preventDefault();
 
             var searchQuery = document.getElementById('searchInput').value;
+            var userId = '<?php echo $sessionID; ?>';
 
-            fetchRecipesBySearchQuery(searchQuery, 1);
+            fetchRecipesBySearchQuery(searchQuery, 1,userId);
         });
     });
 </script>

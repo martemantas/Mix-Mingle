@@ -28,7 +28,7 @@ function fetchRecipesByCategoryAndUser(categoryId, userId) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 var recipes = JSON.parse(xhr.responseText);
-                displayRecipes(recipes);
+                displayRecipes(recipes, userId);
             } else {
                 console.error('Failed to fetch recipes:', xhr.status);
             }
@@ -38,7 +38,7 @@ function fetchRecipesByCategoryAndUser(categoryId, userId) {
     xhr.send();
 }
 
-function fetchRecipesBySearchQuery(searchQuery, category) {
+function fetchRecipesBySearchQuery(searchQuery, category, userId) {
     var xhr = new XMLHttpRequest();
     var url = 'searchRecipes.php?query=' + encodeURIComponent(searchQuery) + '&category=' + category;
     xhr.open('GET', url, true);
@@ -47,7 +47,7 @@ function fetchRecipesBySearchQuery(searchQuery, category) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 var recipes = JSON.parse(xhr.responseText);
-                displayRecipes(recipes);
+                displayRecipes(recipes, userId);
             } else {
                 console.error('Failed to fetch recipes:', xhr.status);
             }
@@ -57,12 +57,15 @@ function fetchRecipesBySearchQuery(searchQuery, category) {
     xhr.send();
 }
 
-function displayRecipes(recipes) {
+function displayRecipes(recipes, userId) {
     var recipesContainer = document.querySelector('.drink-cards');
     recipesContainer.innerHTML = ''; 
-
+    
     if (recipes.length === 0) {
-        recipesContainer.textContent = 'No recipes found.';
+        var message = document.createElement('h3');
+        message.textContent = 'No recipes found for given criteria.';
+        message.classList.add("search-error");
+        recipesContainer.append(message);
     } else {
         recipes.forEach(function(recipe) {
             var recipeCard = document.createElement('div');
@@ -89,7 +92,7 @@ function displayRecipes(recipes) {
             recipesContainer.appendChild(recipeCard);
             recipeCard.addEventListener('click', function() {
                 var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
-                openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, $_SESSION["id"]);
+                openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, userId);
             });
             closeModal(false);
         });

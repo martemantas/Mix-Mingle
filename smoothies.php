@@ -67,7 +67,7 @@ if(!empty($_SESSION["id"])){
                 FROM recipe r
                 JOIN users u ON r.creator = u.user_id
                 WHERE r.category = 2
-                AND u.role IN (2, 3);");
+                AND u.role IN (2, 3) order by name;");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
@@ -126,7 +126,7 @@ if(!empty($_SESSION["id"])){
 
     <div id="newModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal(true)">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
                 <div class="modalFavorite">
@@ -226,8 +226,9 @@ if(!empty($_SESSION["id"])){
             event.preventDefault();
 
             var searchQuery = document.getElementById('searchInput').value;
-
-            fetchRecipesBySearchQuery(searchQuery, 2);
+            var userId = '<?php echo $sessionID; ?>';
+            
+            fetchRecipesBySearchQuery(searchQuery, 2, userId);
         });
     });
 </script>

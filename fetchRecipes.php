@@ -6,8 +6,12 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         $categoryId = $_GET["category"];
         $userId = $_GET["userId"];
 
-        $stmt = $conn->prepare("SELECT * FROM recipe r JOIN favorite_recipes fr ON r.recipe_id = fr.fk_recipe_id WHERE r.category = ? AND fr.fk_user_id = ?");
-        $stmt->bind_param("ii", $categoryId, $userId);
+        if($categoryId != 0){
+            $stmt = $conn->prepare("SELECT * FROM recipe r JOIN favorite_recipes fr ON r.recipe_id = fr.fk_recipe_id WHERE r.category = $categoryId AND fr.fk_user_id = $userId");
+        }
+        else{
+            $stmt = $conn->prepare("SELECT * FROM recipe r JOIN favorite_recipes fr ON r.recipe_id = fr.fk_recipe_id WHERE fr.fk_user_id = $userId");
+        }
         $stmt->execute();
         $result = $stmt->get_result();
 
@@ -19,4 +23,3 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         echo json_encode($recipes);
     }
 }
-?>

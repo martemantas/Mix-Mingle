@@ -58,7 +58,7 @@ if(!empty($_SESSION["id"])){
                 $result = mysqli_query($conn, "SELECT r.*
                 FROM recipe r
                 JOIN users u ON r.creator = u.user_id
-                WHERE u.role IN (2, 3);");
+                WHERE u.role IN (2, 3) order by name;");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
@@ -178,7 +178,7 @@ if(!empty($_SESSION["id"])){
     <?php if (!empty($_SESSION["id"])) { ?>
         document.addEventListener("DOMContentLoaded", function() {
             document.getElementById('favoriteButton').addEventListener('click', function() {
-                var categoryId = 1;
+                var categoryId = 0;
                 var userId = '<?php echo $sessionID; ?>';
 
                 fetchRecipesByCategoryAndUser(categoryId, userId);
@@ -200,7 +200,8 @@ if(!empty($_SESSION["id"])){
 
             var searchQuery = document.getElementById('searchInput').value;
 
-            fetchRecipesBySearchQuery(searchQuery, 0);
+            var userId = '<?php echo $sessionID; ?>';
+            fetchRecipesBySearchQuery(searchQuery, 0, userId);
         });
     });
 </script>
