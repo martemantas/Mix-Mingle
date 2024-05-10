@@ -43,10 +43,24 @@ if(!empty($_SESSION["id"])){
     <section>
         <div class="search-view">
             <h1>Delicious protein cocktails!</h1>
-            <form class="searchBar">
-                <input type="text" placeholder="What are you looking for?" required>
-                <button type="submit">Search</button>
-            </form>
+            <div class="search">
+                <form class="searchBar">
+                    <input type="text" placeholder="What are you looking for?" required>
+                    <button type="submit">Search</button>
+                </form>
+                <div class="searchButtons">
+                    <div class="dropdown">
+                        <button id="sort">Sort</button>
+                        <div class="dropdown-content">
+                            <a id="ascendingName">By name (a)</a>
+                            <a id="descendingName">By name (z)</a>
+                            <a id="ascendingRating">By rating (lowest)</a>
+                            <a id="descendingRating">By rating (highest)</a>
+                        </div>
+                    </div>
+                    <button id="favoriteButton">Favorite</button>
+                </div>
+            </div>
             <div class="drink-cards">
             <?php
                 $result = mysqli_query($conn, "SELECT * FROM recipe WHERE category = 3");
@@ -109,7 +123,10 @@ if(!empty($_SESSION["id"])){
             <span class="close" onclick="closeModal()">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
-                <h2 id="modalName"></h2>
+                <div class="modalFavorite">
+                    <h2 id="modalName"></h2>
+                    <span class="heart-icon">&#10084;</span>
+                </div>
                 <p id="modalDescription"></p>
                 <div class="modalRating">
                     <p id="modalRatingText"></p>
@@ -117,14 +134,20 @@ if(!empty($_SESSION["id"])){
                 </div>
                 <button id="flipButton" onclick="flipCard()">Show Ingredients</button>
             </div>
-            <div class="ingredients">
-                <div id="ingredients"></div>
+            <div class="left-side">
+                <div class="ingredients">
+                    <h2 class="backSideTitle">Ingredients</h2>
+                    <div id="ingredients"></div>
+                </div>
                 <div class="leave-rating">
                     <p>Leave a review</p>
                     <div id="reviewStars" class="stars"></div>
                 </div>
             </div> 
-            <div id="recipeSteps"></div>
+            <div class="right-side">
+                <h2 class="backSideTitle">How to make it</h2>
+                <div id="recipeSteps"></div>
+            </div>
             <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
         </div>
     </div>
@@ -175,5 +198,114 @@ if(!empty($_SESSION["id"])){
             }
         }
     });
+
+    function fetchRecipesByCategoryAndUser(categoryId, userId) {
+        var xhr = new XMLHttpRequest();
+        var url = 'fetchRecipes.php?category=' + categoryId + '&userId=' + userId;
+        xhr.open('GET', url, true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var recipes = JSON.parse(xhr.responseText);
+                    displayRecipes(recipes);
+                } else {
+                    console.error('Failed to fetch recipes:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send();
+    }
+
+    function fetchSortedRecipes(categoryId, orderBy, orderDirection) {
+        var xhr = new XMLHttpRequest();
+        var url = 'sortRecipes.php?category=' + categoryId + '&orderBy=' + orderBy + '&orderDirection=' + orderDirection;
+        xhr.open('GET', url, true);
+
+        xhr.onreadystatechange = function() {
+            if (xhr.readyState === XMLHttpRequest.DONE) {
+                if (xhr.status === 200) {
+                    var recipes = JSON.parse(xhr.responseText);
+                    displayRecipes(recipes);
+                } else {
+                    console.error('Failed to fetch recipes:', xhr.status);
+                }
+            }
+        };
+
+        xhr.send();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('ascendingName').addEventListener('click', function() {
+            var userId = '<?php echo $sessionID; ?>';
+            fetchSortedRecipes(3, 'name', 'ASC');
+        });
+
+        document.getElementById('descendingName').addEventListener('click', function() {
+            var userId = '<?php echo $sessionID; ?>';
+            fetchSortedRecipes(3, 'name', 'DESC');
+        });
+
+        document.getElementById('ascendingRating').addEventListener('click', function() {
+            var userId = '<?php echo $sessionID; ?>';
+            fetchSortedRecipes(3, 'total_rating', 'ASC');
+        });
+
+        document.getElementById('descendingRating').addEventListener('click', function() {
+            var userId = '<?php echo $sessionID; ?>';
+            fetchSortedRecipes(3, 'total_rating', 'DESC');
+        });
+    });
+
+    function displayRecipes(recipes) {
+        var recipesContainer = document.querySelector('.drink-cards');
+        recipesContainer.innerHTML = ''; 
+
+        if (recipes.length === 0) {
+            recipesContainer.textContent = 'No recipes found.';
+        } else {
+            recipes.forEach(function(recipe) {
+                var recipeCard = document.createElement('div');
+                recipeCard.classList.add('drink-card', 'alcoholic');
+
+                var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
+                var img = document.createElement('img');
+                img.src = imagePath;
+                img.alt = recipe.name;
+                recipeCard.appendChild(img);
+
+                var name = document.createElement('h1');
+                name.classList.add('recipe-name');
+                name.textContent = recipe.name;
+                recipeCard.appendChild(name);
+
+                recipesContainer.appendChild(recipeCard);
+                recipeCard.addEventListener('click', function() {
+                    var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
+                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+                });
+                closeModal(false);
+            });
+        }
+    }
+
+    <?php if (!empty($_SESSION["id"])) { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            var categoryId = 3;
+            var userId = '<?php echo $sessionID; ?>';
+
+            fetchRecipesByCategoryAndUser(categoryId, userId);
+        });
+    });
+    <?php } else { ?>
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('favoriteButton').addEventListener('click', function() {
+            popUpDiv("User not found Please login",'loginSuggestion');
+        });
+    });
+    <?php } ?>
 </script>
 </html>
