@@ -46,7 +46,6 @@ else{
         echo '</div>';
         echo '<ul>';
             echo '<li><a href="home.php">Home</a></li>';
-            echo '<li><a href="newRecipe.php">New recipe</a></li>';
         echo '</ul>';
         if(empty($_SESSION["id"])){
             echo '<li class="login"><a href="login.php">Login</a></li>';
