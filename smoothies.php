@@ -173,10 +173,10 @@ if(!empty($_SESSION["id"])){
                 echo '</form>';
             echo '</div>';
         echo '</div>';
-        echo '<p>Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+        echo '<p>Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
         }
         else{
-            echo '<p style="border-top:none">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+            echo '<p style="border-top:none">Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
         }
     ?>
     </footer>

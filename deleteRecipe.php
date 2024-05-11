@@ -24,8 +24,18 @@
             echo "Error deleting record: " . $conn->error;
         }
 
-        $deleteInstructions = "DELETE FROM instruction WHERE fk_recipe_id = '$recipeId'";
+        $deleteInstructions = "DELETE FROM rating WHERE fk_recipe_id = '$recipeId'";
         if ($conn->query($deleteInstructions) === FALSE) { 
+            echo "Error deleting record: " . $conn->error;
+        }
+
+        $deleteRatings = "DELETE FROM favorite_recipes WHERE fk_recipe_id = '$recipeId'";
+        if ($conn->query($deleteRatings) === FALSE) { 
+            echo "Error deleting record: " . $conn->error;
+        }
+        
+        $deleteFavorites = "DELETE FROM favorite_recipes WHERE fk_recipe_id = '$recipeId'";
+        if ($conn->query($deleteFavorites) === FALSE) { 
             echo "Error deleting record: " . $conn->error;
         }
 

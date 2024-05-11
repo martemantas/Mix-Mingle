@@ -68,7 +68,7 @@ if(!empty($_SESSION["id"])){
         </div>
     </div>
     <footer>
-        <p style="border-top: none;">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>
+        <p style="border-top: none;">Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>
     </footer>
 </body>
 </html>

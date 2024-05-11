@@ -10,6 +10,7 @@
     --primary-bg-color: #fff9db; /*ddd8c4*/
     --secondary-bg-color: #84b59f;
     --third-bg-color: #E3242B;
+    --fourth-bg-color: #4df474;
     --text-primary-color: #0b4f6c; /*gal 0d47a1?*/
 }
 
@@ -182,6 +183,20 @@ section{
     position: absolute;
     bottom: 0;
     left: 90%;
+    top: 5%;
+    transform: translateX(-50%);
+    height: 25px;
+    width: 25px;
+    margin-bottom: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 5;
+}
+.edit{
+    background-color: var(--fourth-bg-color);
+    position: absolute;
+    bottom: 0;
+    left: 75%;
     top: 5%;
     transform: translateX(-50%);
     height: 25px;
