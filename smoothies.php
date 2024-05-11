@@ -42,7 +42,7 @@ if(!empty($_SESSION["id"])){
 ?>
     <section>
         <div class="search-view">
-            <h1>Smooties for your taste!</h1>
+            <h1>Smoothies for your taste!</h1>
             <div class="search">
                 <form class="searchBar">
                     <input type="text" placeholder="What are you looking for?" required>
