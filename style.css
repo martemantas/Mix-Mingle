@@ -211,13 +211,24 @@ section{
   
 .search{
     position: relative;
-    height: 25px;
+    display: flex;
+    align-items: center;
+    margin-top: 15px;
 }
-.searchBar, .searchButtons{
+.searchBar{
     position: absolute;
     width: 330px;
     height: 20px;
     margin-top: 20px;
+}
+.searchButtons {
+    right: 0;
+    position: absolute;
+    display: flex;
+    justify-content: flex-end;
+    height: 20px;
+    margin-top: 20px;
+    
 }
 .searchBar input {
     width: 100%;
@@ -242,20 +253,50 @@ section{
     padding: 20px;
     border-radius: 20px;
     background-color: var(--third-bg-color);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.searchBar button{
     position: absolute;
     top: 0;
     right: 0;
-    font-size: 18px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
+}
+.searchButtons button{
+    margin-right: 5px;
 }
 .searchBar button:hover, .searchButtons button:hover{
     background-color: #c4191f;
 }
-.searchButtons{
-    width: 100%;
+
+/* Dropdown Button */
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+}
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #eee;
+    min-width: 160px;
+    border-radius: 20px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+}
+.dropdown-content a {
+    color: black;
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+.dropdown-content a:hover {
+    background-color: #ddd;
+    border-radius: 20px;
+}
+.dropdown:hover .dropdown-content {
+    display: block;
 }
 
 /* Messages */
