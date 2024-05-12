@@ -30,6 +30,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
+                echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }    
         echo '</ul>';
         if(empty($_SESSION["id"])){
@@ -94,13 +95,24 @@ if(!empty($_SESSION["id"])){
                             $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
                             // Check if user is logged in
                             if(!empty($_SESSION["id"])){
+                                $isOwner = False;
+                            
+                                if($resultRow['creator'] == $_SESSION["id"])
+                                {
+                                    $isOwner = True;
+                                }
                                 // Check if user is admin or editor 
-                                if($row['role'] > 1){
-                                    echo '<form method="post" action="deleteRecipe.php">';
-                                        echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
-                                        echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
-                                        echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
-                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                if($row['role'] == 2 && $isOwner || $row['role'] == 3){
+                                    $currentPage = htmlspecialchars($_SERVER['REQUEST_URI']);
+                                    echo '<form method="post" action="editRecipe.php">';
+                                    echo '<input type="hidden" name="previous_page" value="'.$currentPage.'">';
+                                    echo '<input type="hidden" name="recipe_id" value="'.$resultRow['recipe_id'].'">';
+                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
+                                    echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                    echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
+                                    echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button>';
+                                    echo '<button type="submit" class="edit" name="edit">E</button>';
+                                    echo '</div>';
                                     echo '</form>';
                                 }
                                 else {
@@ -173,10 +185,10 @@ if(!empty($_SESSION["id"])){
                 echo '</form>';
             echo '</div>';
         echo '</div>';
-        echo '<p>Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+        echo '<p>Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
         }
         else{
-            echo '<p style="border-top:none">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+            echo '<p style="border-top:none">Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
         }
     ?>
     </footer>

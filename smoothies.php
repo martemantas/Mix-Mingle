@@ -42,7 +42,7 @@ if(!empty($_SESSION["id"])){
 ?>
     <section>
         <div class="search-view">
-            <h1>Smooties for your taste!</h1>
+            <h1>Smoothies for your taste!</h1>
             <div class="search">
                 <form class="searchBar" id="searchForm">
                     <input type="text" id="searchInput" placeholder="What are you looking for?">
@@ -173,10 +173,10 @@ if(!empty($_SESSION["id"])){
                 echo '</form>';
             echo '</div>';
         echo '</div>';
-        echo '<p>Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+        echo '<p>Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
         }
         else{
-            echo '<p style="border-top:none">Tai nera komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
+            echo '<p style="border-top:none">Tai nėra komercinis projektas, darbas atliktas mokymosi tikslais Manto ir Mariaus @KTU</p>';
         }
     ?>
     </footer>
