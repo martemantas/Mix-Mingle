@@ -12,6 +12,7 @@ if(!empty($_SESSION["id"])){
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="search.css">
     <title>Mix&Migle</title>
 </head>
 <script src="home.js"></script>
@@ -47,10 +48,14 @@ if(!empty($_SESSION["id"])){
             <div class="search">
                 <form class="searchBar" id="searchForm">
                     <input type="text" id="searchInput" placeholder="What are you looking for?">
+                    <input type="text" id="searchInputCreator" placeholder="Do you know the author?">
                     <button type="submit">Search</button>
                 </form>
-                <div class="searchButtons">
-                    <button id="favoriteButton">Favorite</button>
+                <div class="searchButtons" style="justify-content: flex-start;">
+                    <div class="ingredient-dropdown">
+                        <label for="">Or choose by ingredients</label>
+                        <button class="add-ingredient">Add</button>
+                    </div>
                 </div>
             </div>
             <div class="drink-cards">
@@ -175,34 +180,42 @@ if(!empty($_SESSION["id"])){
 <script src="modal.js"></script>
 <script src="common.js"></script>
 <script>
-    <?php if (!empty($_SESSION["id"])) { ?>
-        document.addEventListener("DOMContentLoaded", function() {
-            document.getElementById('favoriteButton').addEventListener('click', function() {
-                var categoryId = 0;
-                var userId = '<?php echo $sessionID; ?>';
-
-                fetchRecipesByCategoryAndUser(categoryId, userId);
-            });
-        });
-    <?php } 
-
-    else if (empty($_SESSION["id"]) || ($_SESSION["id"] == 0)) { ?>
     document.addEventListener("DOMContentLoaded", function() {
-        document.getElementById('favoriteButton').addEventListener('click', function() {
-            popUpDiv("Guests don't have favorite recipes",'loginSuggestion');
-        });
-    });
-    <?php } ?>
-
-    document.addEventListener("DOMContentLoaded", function() {
+        var userId = '<?php echo $sessionID; ?>';
+        
         document.getElementById('searchForm').addEventListener('submit', function(event) {
             event.preventDefault();
-
+            
             var searchQuery = document.getElementById('searchInput').value;
+            var creatorQuery = document.getElementById('searchInputCreator').value;
+            var selectedIngredients = [];
+            var ingredientSelects = document.querySelectorAll('.ingredient-select');
+            ingredientSelects.forEach(function(select) {
+                selectedIngredients.push(select.value);
+            });
 
-            var userId = '<?php echo $sessionID; ?>';
-            fetchRecipesBySearchQuery(searchQuery, 0, userId);
+            fetchRecipesBySearchQuery(searchQuery, creatorQuery, 0, userId, selectedIngredients);
         });
     });
+
+    // function fetchRecipesByIngredients(searchQuery, category, userId, ingredients) {
+    //     var xhr = new XMLHttpRequest();
+    //     var url = 'searchRecipes.php?query=' + encodeURIComponent(searchQuery) + '&category=' + category  + '&ingredients=' + JSON.stringify(ingredients);
+    //     xhr.open('GET', url, true);
+    
+    //     xhr.onreadystatechange = function() {
+    //         if (xhr.readyState === XMLHttpRequest.DONE) {
+    //             if (xhr.status === 200) {
+    //                 var recipes = JSON.parse(xhr.responseText);
+    //                 displayRecipes(recipes, userId);
+    //             } else {
+    //                 console.error('Failed to fetch recipes:', xhr.status);
+    //             }
+    //         }
+    //     };
+    
+    //     xhr.send();
+    // }
 </script>
+<script src="search.js"></script>
 </html>

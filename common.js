@@ -38,14 +38,15 @@ function fetchRecipesByCategoryAndUser(categoryId, userId) {
     xhr.send();
 }
 
-function fetchRecipesBySearchQuery(searchQuery, category, userId) {
+function fetchRecipesBySearchQuery(searchQuery, creatorQuery, category, userId, ingredients) {
     var xhr = new XMLHttpRequest();
-    var url = 'searchRecipes.php?query=' + encodeURIComponent(searchQuery) + '&category=' + category;
+    var url = 'searchRecipes.php?query=' + encodeURIComponent(searchQuery) + '&creatorQuery=' + creatorQuery  + '&category=' + category + '&ingredients=' + JSON.stringify(ingredients);
     xhr.open('GET', url, true);
     
     xhr.onreadystatechange = function() {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
+                // console.log(xhr.responseText);
                 var recipes = JSON.parse(xhr.responseText);
                 displayRecipes(recipes, userId);
             } else {

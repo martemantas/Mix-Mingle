@@ -30,6 +30,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
+                echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }    
         echo '</ul>';
         if(empty($_SESSION["id"])){
@@ -228,7 +229,7 @@ if(!empty($_SESSION["id"])){
             var searchQuery = document.getElementById('searchInput').value;
             var userId = '<?php echo $sessionID; ?>';
 
-            fetchRecipesBySearchQuery(searchQuery, 3, userId);
+            fetchRecipesBySearchQuery(searchQuery, '', 3, userId, []);
         });
     });
 </script>

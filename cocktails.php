@@ -239,7 +239,7 @@ if(!empty($_SESSION["id"])){
             var searchQuery = document.getElementById('searchInput').value;
             var userId = '<?php echo $sessionID; ?>';
 
-            fetchRecipesBySearchQuery(searchQuery, 1,userId);
+            fetchRecipesBySearchQuery(searchQuery, '', 1, userId, []);
         });
     });
 </script>

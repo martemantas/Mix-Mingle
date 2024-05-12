@@ -224,11 +224,11 @@ section{
 .searchButtons {
     right: 0;
     position: absolute;
+    width: 60%;
     display: flex;
     justify-content: flex-end;
     height: 20px;
     margin-top: 20px;
-    
 }
 .searchBar input {
     width: 100%;
@@ -237,7 +237,6 @@ section{
     border-radius: 20px;
     background: #eee;
 }
-
 .searchBar input:focus {
     outline: 0;
     background: #fff;
