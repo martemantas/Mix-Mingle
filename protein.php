@@ -30,6 +30,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
+                echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }    
         echo '</ul>';
         if(empty($_SESSION["id"])){
@@ -42,7 +43,7 @@ if(!empty($_SESSION["id"])){
 ?>
     <section>
         <div class="search-view">
-            <h1>Delicious protein cocktails!</h1>
+            <h1>Delicious protein shakes!</h1>
             <div class="search">
                 <form class="searchBar">
                     <input type="text" placeholder="What are you looking for?" required>
@@ -71,7 +72,7 @@ if(!empty($_SESSION["id"])){
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
-                        
+
                         // Check if recipe has picture
                         if (empty($resultRow['picture'])) {
                             // Check if user is logged in
@@ -94,13 +95,22 @@ if(!empty($_SESSION["id"])){
                             $resultRow['picture'] = "recipes/{$recipeId}.{$resultRow['picture']}";
                             // Check if user is logged in
                             if(!empty($_SESSION["id"])){
+                                $isOwner = False;
+                            
+                                if($resultRow['creator'] == $_SESSION["id"])
+                                {
+                                    $isOwner = True;
+                                }
                                 // Check if user is admin or editor 
-                                if($row['role'] > 1){
-                                    echo '<form method="post" action="deleteRecipe.php">';
+                                if($row['role'] == 2 && $isOwner || $row['role'] == 3){
+                                    echo '<form method="post" action="editRecipe.php">';
+                                        echo '<input type="hidden" name="recipe_id" value="'.$resultRow['recipe_id'].'">';
                                         echo '<div class="drink-card protein" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
                                         echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
                                         echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
-                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button></div>';
+                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button>';
+                                        echo '<button type="submit" class="edit" name="edit">E</button>';
+                                        echo '</div>';
                                     echo '</form>';
                                 }
                                 else {
@@ -126,7 +136,7 @@ if(!empty($_SESSION["id"])){
 
     <div id="newModal" class="modal">
         <div class="modal-content">
-            <span class="close" onclick="closeModal()">&times;</span>
+            <span class="close" onclick="closeModal(true)">&times;</span>
             <img id="modalImg">
             <div class="modalInfo">
                 <div class="modalFavorite">
@@ -157,7 +167,7 @@ if(!empty($_SESSION["id"])){
             <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
         </div>
     </div>
-    
+
     <footer>
     <?php
         if(!empty($_SESSION["id"])){
@@ -274,7 +284,7 @@ if(!empty($_SESSION["id"])){
         } else {
             recipes.forEach(function(recipe) {
                 var recipeCard = document.createElement('div');
-                recipeCard.classList.add('drink-card', 'alcoholic');
+                recipeCard.classList.add('drink-card', 'protein');
 
                 var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
                 var img = document.createElement('img');
@@ -287,15 +297,56 @@ if(!empty($_SESSION["id"])){
                 name.textContent = recipe.name;
                 recipeCard.appendChild(name);
 
-                recipesContainer.appendChild(recipeCard);
-                recipeCard.addEventListener('click', function() {
-                    var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
-                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+                // Check if user is logged in
+                if (<?php echo !empty($_SESSION["id"]) ? 'true' : 'false'; ?>) {
+                    var canEdit = <?php echo ($row['role'] == 2 && $isOwner) || $row['role'] == 3 ? 'true' : 'false'; ?>;
+
+                    // If user is admin or editor and creator of the recipe
+                    if (canEdit) {
+                        var editForm = document.createElement('form');
+                        editForm.method = 'post';
+                        editForm.action = 'editRecipe.php';
+
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'recipe_id';
+                        hiddenInput.value = recipe.recipe_id;
+                        editForm.appendChild(hiddenInput);
+
+                        var editButton = document.createElement('button');
+                        editButton.type = 'submit';
+                        editButton.classList.add('edit');
+                        editButton.name = 'edit';
+                        editButton.textContent = 'E';
+                        editForm.appendChild(editButton);
+
+                        var deleteButton = document.createElement('button');
+                        deleteButton.type = 'button';
+                        deleteButton.classList.add('delete');
+                        deleteButton.value = recipe.recipe_id;
+                        deleteButton.textContent = '×';
+                        deleteButton.id = 'confirmButton';
+                        deleteButton.addEventListener('click', function() {
+                            var result = confirm("Are you sure you want to delete?");
+                            if (result) {
+                                deleteRecipe(recipe.recipe_id);
+                            }
+                        });
+                        editForm.appendChild(deleteButton);
+
+                        recipeCard.appendChild(editForm);
+                    }
+                }
+                    recipesContainer.appendChild(recipeCard);
+                    recipeCard.addEventListener('click', function() {
+                        var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
+                        openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+                    });
+                    closeModal(false);
                 });
-                closeModal(false);
-            });
         }
     }
+
 
     <?php if (!empty($_SESSION["id"])) { ?>
     document.addEventListener("DOMContentLoaded", function() {

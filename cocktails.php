@@ -103,16 +103,14 @@ if(!empty($_SESSION["id"])){
                                 }
                                 // Check if user is admin or editor 
                                 if($row['role'] == 2 && $isOwner || $row['role'] == 3){
-                                    $currentPage = htmlspecialchars($_SERVER['REQUEST_URI']);
                                     echo '<form method="post" action="editRecipe.php">';
-
-                                    echo '<input type="hidden" name="recipe_id" value="'.$resultRow['recipe_id'].'">';
-                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
-                                    echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
-                                    echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
-                                    echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button>';
-                                    echo '<button type="submit" class="edit" name="edit">E</button>';
-                                    echo '</div>';
+                                        echo '<input type="hidden" name="recipe_id" value="'.$resultRow['recipe_id'].'">';
+                                        echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
+                                        echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                        echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
+                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button>';
+                                        echo '<button type="submit" class="edit" name="edit">E</button>';
+                                        echo '</div>';
                                     echo '</form>';
                                 }
                                 else {
