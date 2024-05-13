@@ -28,7 +28,6 @@ if(!empty($_SESSION["id"])){
         echo '</div>';
         echo '<ul>';
             echo '<li><a href="home.php">Home</a></li>';
-            echo '<li><a href="">Mix</a></li>';
             echo '<li><a href="surprise.php">Surprise Me</a></li>';
             echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){

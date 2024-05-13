@@ -69,12 +69,13 @@ if ($_SERVER["REQUEST_METHOD"] == "GET") {
         }
         //simplest for individual pages where creator field doesnt exists
         else{
-            $sql = "SELECT * FROM recipe WHERE name LIKE " . "'%$searchQuery%'";
+            $sql = "SELECT * FROM recipe r WHERE name LIKE " . "'%$searchQuery%'";
 
             if ($category != 0) {
                 $sql .= " AND category = $category";
             }
         }
+        $sql .= " order by r.name";
         // echo "<script>console.log($sql);</script>";
         $stmt = $conn->prepare($sql);
         $stmt->execute();

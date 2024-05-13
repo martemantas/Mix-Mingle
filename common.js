@@ -58,48 +58,6 @@ function fetchRecipesBySearchQuery(searchQuery, creatorQuery, category, userId, 
     xhr.send();
 }
 
-function displayRecipes(recipes, userId) {
-    var recipesContainer = document.querySelector('.drink-cards');
-    recipesContainer.innerHTML = ''; 
-    
-    if (recipes.length === 0) {
-        var message = document.createElement('h3');
-        message.textContent = 'No recipes found for given criteria.';
-        message.classList.add("search-error");
-        recipesContainer.append(message);
-    } else {
-        recipes.forEach(function(recipe) {
-            var recipeCard = document.createElement('div');
-            recipeCard.classList.add('drink-card', 'alcoholic');
-
-            var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
-            var img = document.createElement('img');
-            img.src = imagePath;
-            img.alt = recipe.name;
-            recipeCard.appendChild(img);
-
-            var name = document.createElement('h1');
-            name.classList.add('recipe-name');
-            name.textContent = recipe.name;
-            recipeCard.appendChild(name);
-
-            var deleteBtn = document.createElement('button');
-            deleteBtn.classList.add('delete');
-            deleteBtn.setAttribute("id", "confirmButton");
-            deleteBtn.value = recipe.recipe_id;
-            deleteBtn.textContent = 'x';
-            recipeCard.appendChild(deleteBtn);
-
-            recipesContainer.appendChild(recipeCard);
-            recipeCard.addEventListener('click', function() {
-                var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
-                openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, userId);
-            });
-            closeModal(false);
-        });
-    }
-}
-
 // not used in search.php
 function fetchSortedRecipes(categoryId, orderBy, orderDirection) {
     var xhr = new XMLHttpRequest();

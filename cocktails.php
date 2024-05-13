@@ -25,7 +25,6 @@ if(!empty($_SESSION["id"])){
         echo '</div>';
         echo '<ul>';
             echo '<li><a href="home.php">Home</a></li>';
-            echo '<li><a href="">Mix</a></li>';
             echo '<li><a href="surprise.php">Surprise Me</a></li>';
             echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
@@ -213,57 +212,57 @@ if(!empty($_SESSION["id"])){
     });
 
     function displayRecipes(recipes) {
-    var recipesContainer = document.querySelector('.drink-cards');
-    recipesContainer.innerHTML = ''; 
+        var recipesContainer = document.querySelector('.drink-cards');
+        recipesContainer.innerHTML = ''; 
 
-    if (recipes.length === 0) {
-        recipesContainer.textContent = 'No recipes found.';
-    } else {
-        recipes.forEach(function(recipe) {
-            var recipeCard = document.createElement('div');
-            recipeCard.classList.add('drink-card', 'alcoholic');
+        if (recipes.length === 0) {
+            recipesContainer.textContent = 'No recipes found.';
+        } else {
+            recipes.forEach(function(recipe) {
+                var recipeCard = document.createElement('div');
+                recipeCard.classList.add('drink-card', 'alcoholic');
 
-            var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
-            var img = document.createElement('img');
-            img.src = imagePath;
-            img.alt = recipe.name;
-            recipeCard.appendChild(img);
+                var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
+                var img = document.createElement('img');
+                img.src = imagePath;
+                img.alt = recipe.name;
+                recipeCard.appendChild(img);
 
-            var name = document.createElement('h1');
-            name.classList.add('recipe-name');
-            name.textContent = recipe.name;
-            recipeCard.appendChild(name);
+                var name = document.createElement('h1');
+                name.classList.add('recipe-name');
+                name.textContent = recipe.name;
+                recipeCard.appendChild(name);
 
             // Check if user is logged in
-            if (<?php echo !empty($_SESSION["id"]) ? 'true' : 'false'; ?>) {
-                var canEdit = <?php echo ($row['role'] == 2 && $isOwner) || $row['role'] == 3 ? 'true' : 'false'; ?>;
+                if (<?php echo !empty($_SESSION["id"]) ? 'true' : 'false'; ?>) {
+                    var canEdit = <?php echo ($row['role'] == 2 && $isOwner) || $row['role'] == 3 ? 'true' : 'false'; ?>;
 
-                // If user is admin or editor and creator of the recipe
-                if (canEdit) {
-                    var editForm = document.createElement('form');
-                    editForm.method = 'post';
-                    editForm.action = 'editRecipe.php';
+                    // If user is admin or editor and creator of the recipe
+                    if (canEdit) {
+                        var editForm = document.createElement('form');
+                        editForm.method = 'post';
+                        editForm.action = 'editRecipe.php';
 
-                    var hiddenInput = document.createElement('input');
-                    hiddenInput.type = 'hidden';
-                    hiddenInput.name = 'recipe_id';
-                    hiddenInput.value = recipe.recipe_id;
-                    editForm.appendChild(hiddenInput);
+                        var hiddenInput = document.createElement('input');
+                        hiddenInput.type = 'hidden';
+                        hiddenInput.name = 'recipe_id';
+                        hiddenInput.value = recipe.recipe_id;
+                        editForm.appendChild(hiddenInput);
 
-                    var editButton = document.createElement('button');
-                    editButton.type = 'submit';
-                    editButton.classList.add('edit');
-                    editButton.name = 'edit';
-                    editButton.textContent = 'E';
-                    editForm.appendChild(editButton);
+                        var editButton = document.createElement('button');
+                        editButton.type = 'submit';
+                        editButton.classList.add('edit');
+                        editButton.name = 'edit';
+                        editButton.textContent = 'E';
+                        editForm.appendChild(editButton);
 
-                    var deleteButton = document.createElement('button');
-                    deleteButton.type = 'button';
-                    deleteButton.classList.add('delete');
-                    deleteButton.value = recipe.recipe_id;
-                    deleteButton.textContent = '×';
-                    deleteButton.id = 'confirmButton';
-                    deleteButton.addEventListener('click', function() {
+                        var deleteButton = document.createElement('button');
+                        deleteButton.type = 'button';
+                        deleteButton.classList.add('delete');
+                        deleteButton.value = recipe.recipe_id;
+                        deleteButton.textContent = '×';
+                        deleteButton.id = 'confirmButton';
+                        deleteButton.addEventListener('click', function() {
                         var result = confirm("Are you sure you want to delete?");
                         if (result) {
                             deleteRecipe(recipe.recipe_id);
