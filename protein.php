@@ -54,8 +54,8 @@ if(!empty($_SESSION["id"])){
                         <div class="dropdown-content">
                             <a id="ascendingName">By name (a)</a>
                             <a id="descendingName">By name (z)</a>
-                            <a id="ascendingRating">By rating (lowest)</a>
-                            <a id="descendingRating">By rating (highest)</a>
+                            <a id="ascendingRating">By rating (ascending)</a>
+                            <a id="descendingRating">By rating (descending)</a>
                         </div>
                     </div>
                     <button id="favoriteButton">Favorite</button>
