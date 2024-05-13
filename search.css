@@ -1,0 +1,76 @@
+.searchBar input {
+    margin-bottom: 5px;
+    height: 10%;
+}
+.drink-cards {
+    margin-top: 25px;
+}
+.searchBar{
+    position: static;
+    display: block;
+    min-height: 150px;
+}
+.searchBar button, .searchButtons button{
+    height: 10%;
+}
+.searchButtons label{
+    font-size: 18px;
+}
+.searchBar button{
+    position: static;
+}
+.searchButtons button{
+    padding: 15px 10px;
+}
+.searchButtons{
+    width: 70%;
+    /* background-color: green; */
+    height: 100%;
+}
+.ingredient-dropdown{
+    display: flex;
+    flex-direction: column;
+    overflow-x: hidden;
+}
+.ingredient-dropdown::-webkit-scrollbar {
+    display: none;
+}
+.ingredient-select{
+    padding: 5px 10px;
+    margin: 5px 0;
+    border-radius: 5px;
+    background: #eee;
+}
+.remove-ingredient{
+    width: 50%;
+}
+.add-ingredient{
+    position: absolute;
+    top: 0;
+    left: 30%;
+    transform: translateX(-50%);
+}
+@media only screen and (max-width: 600px) {
+    .drink-cards{
+        margin-top: 100px;
+    }
+    .search{
+        height: 200px;
+    }
+    .searchBar{
+        margin-bottom: 0;
+    }
+    .searchButtons{
+        width: 100%;
+        margin-top: 0;
+        position: relative;
+    }
+    .ingredient-dropdown{
+        height: 125px;
+    }
+    .add-ingredient{
+        right: 0;
+        left: unset;
+        transform: unset;
+    }
+}

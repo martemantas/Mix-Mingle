@@ -224,11 +224,11 @@ section{
 .searchButtons {
     right: 0;
     position: absolute;
+    width: 60%;
     display: flex;
     justify-content: flex-end;
     height: 20px;
     margin-top: 20px;
-    
 }
 .searchBar input {
     width: 100%;
@@ -237,7 +237,6 @@ section{
     border-radius: 20px;
     background: #eee;
 }
-
 .searchBar input:focus {
     outline: 0;
     background: #fff;
@@ -290,6 +289,7 @@ section{
     padding: 12px 16px;
     text-decoration: none;
     display: block;
+    cursor: pointer;
 }
 .dropdown-content a:hover {
     background-color: #ddd;
@@ -721,6 +721,8 @@ footer p {
     }
     .drink-cards{
         gap: 35px;
+        padding: 0;
+        grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
     .drink-card{
         height: 180px;
@@ -744,10 +746,30 @@ footer p {
         display: none;
     }
 
+    /* Search */
+
+    .search{
+        display: flex;
+        flex-direction: column;
+        height: 100px;
+        position: static;
+    }
+    .searchBar{
+        margin-bottom: 50px;
+    }
+    .searchButtons{
+        position: static;
+        display: flex;
+        justify-content: left;
+        width: 100%;
+        margin-top: 100px;
+    }
+
     /* Modal */
 
     .modal-content {
         height: 650px; 
+        max-height: 80%;
         max-width: 350px;
         grid-template-columns: 100%;
     }

@@ -30,13 +30,11 @@ else{
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="">Mix</a></li>';
             echo '<li><a href="surprise.php">Surprise Me</a></li>';
-            echo '<li><a href="">Search</a></li>';
+            echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
+                echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }   
-            if(!empty($_SESSION["id"]) && $row['role'] == 3){
-                echo '<li><a href="admin.php">Admin</a></li>';
-            } 
         echo '</ul>';
         if(empty($_SESSION["id"])){
             echo '<li class="login"><a href="login.php">Login</a></li>';

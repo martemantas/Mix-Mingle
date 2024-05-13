@@ -27,7 +27,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="">Mix</a></li>';
             echo '<li><a href="surprise.php">Surprise Me</a></li>';
-            echo '<li><a href="">Search</a></li>';
+            echo '<li><a href="search.php">Search</a></li>';
             if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
                 echo '<li><a href="newIngredient.php">New ingredient</a></li>';
@@ -45,8 +45,8 @@ if(!empty($_SESSION["id"])){
         <div class="search-view">
             <h1>Awe inspiring smoothies!</h1>
             <div class="search">
-                <form class="searchBar">
-                    <input type="text" placeholder="What are you looking for?" required>
+                <form class="searchBar" id="searchForm">
+                    <input type="text" id="searchInput" placeholder="What are you looking for?">
                     <button type="submit">Search</button>
                 </form>
                 <div class="searchButtons">
@@ -68,7 +68,7 @@ if(!empty($_SESSION["id"])){
                 FROM recipe r
                 JOIN users u ON r.creator = u.user_id
                 WHERE r.category = 2
-                AND u.role IN (2, 3);");
+                AND u.role IN (2, 3) order by name;");
                 if (mysqli_num_rows($result) > 0) {
                     while ($resultRow = mysqli_fetch_assoc($result)) {
                         $recipeId = $resultRow['recipe_id'];
@@ -192,85 +192,22 @@ if(!empty($_SESSION["id"])){
     </footer>
 </body>
 <script src="modal.js"></script>
+<script src="common.js"></script>
 <script>
-    document.addEventListener("click", function(event) {
-        if (event.target.classList.contains("delete")) {
-            var result = confirm("Are you sure you want to delete?");
-            if (!result) {
-                event.preventDefault();
-            } else {
-                var recipeId = event.target.value;
-                console.log(recipeId);
-
-                var xhr = new XMLHttpRequest();
-                xhr.open("POST", "deleteRecipe.php", true);
-                xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-                xhr.onreadystatechange = function () {
-                    if (xhr.readyState == 4 && xhr.status == 200) {
-                        location.reload();
-                    }
-                };
-                xhr.send("recipe_id=" + recipeId);
-            }
-        }
-    });
-
-    function fetchRecipesByCategoryAndUser(categoryId, userId) {
-        var xhr = new XMLHttpRequest();
-        var url = 'fetchRecipes.php?category=' + categoryId + '&userId=' + userId;
-        xhr.open('GET', url, true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var recipes = JSON.parse(xhr.responseText);
-                    displayRecipes(recipes);
-                } else {
-                    console.error('Failed to fetch recipes:', xhr.status);
-                }
-            }
-        };
-
-        xhr.send();
-    }
-
-    function fetchSortedRecipes(categoryId, orderBy, orderDirection) {
-        var xhr = new XMLHttpRequest();
-        var url = 'sortRecipes.php?category=' + categoryId + '&orderBy=' + orderBy + '&orderDirection=' + orderDirection;
-        xhr.open('GET', url, true);
-
-        xhr.onreadystatechange = function() {
-            if (xhr.readyState === XMLHttpRequest.DONE) {
-                if (xhr.status === 200) {
-                    var recipes = JSON.parse(xhr.responseText);
-                    displayRecipes(recipes);
-                } else {
-                    console.error('Failed to fetch recipes:', xhr.status);
-                }
-            }
-        };
-
-        xhr.send();
-    }
-
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('ascendingName').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'name', 'ASC');
         });
 
         document.getElementById('descendingName').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'name', 'DESC');
         });
 
         document.getElementById('ascendingRating').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'total_rating', 'ASC');
         });
 
         document.getElementById('descendingRating').addEventListener('click', function() {
-            var userId = '<?php echo $sessionID; ?>';
             fetchSortedRecipes(2, 'total_rating', 'DESC');
         });
     });
@@ -347,7 +284,6 @@ if(!empty($_SESSION["id"])){
         }
     }
 
-
     <?php if (!empty($_SESSION["id"])) { ?>
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('favoriteButton').addEventListener('click', function() {
@@ -357,12 +293,25 @@ if(!empty($_SESSION["id"])){
             fetchRecipesByCategoryAndUser(categoryId, userId);
         });
     });
-    <?php } else { ?>
+    <?php } 
+
+    else if (empty($_SESSION["id"]) || ($_SESSION["id"] == 0)) { ?>
     document.addEventListener("DOMContentLoaded", function() {
         document.getElementById('favoriteButton').addEventListener('click', function() {
-            popUpDiv("User not found Please login",'loginSuggestion');
+            popUpDiv("Guests don't have favorite recipes",'loginSuggestion');
         });
     });
     <?php } ?>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        document.getElementById('searchForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            var searchQuery = document.getElementById('searchInput').value;
+            var userId = '<?php echo $sessionID; ?>';
+            
+            fetchRecipesBySearchQuery(searchQuery, '', 2, userId, []);
+        });
+    });
 </script>
 </html>
