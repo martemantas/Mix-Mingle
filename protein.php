@@ -49,6 +49,7 @@ if(!empty($_SESSION["id"])){
                     <button type="submit">Search</button>
                 </form>
                 <div class="searchButtons">
+                    <button class="clearSearch" id="clearSearch">Clear</button>
                     <div class="dropdown">
                         <button id="sort">Sort</button>
                         <div class="dropdown-content">

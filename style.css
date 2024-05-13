@@ -268,6 +268,17 @@ section{
 .searchBar button:hover, .searchButtons button:hover{
     background-color: #c4191f;
 }
+.clearSearch{
+    visibility: hidden;
+}
+.searchBar .btns{
+    display: flex;
+    height: 10%;
+    flex-direction: row;
+}
+.searchBar .btns button{
+    margin-right: 5px;
+}
 
 /* Dropdown Button */
 
@@ -760,7 +771,6 @@ footer p {
     .searchButtons{
         position: static;
         display: flex;
-        justify-content: left;
         width: 100%;
         margin-top: 100px;
     }

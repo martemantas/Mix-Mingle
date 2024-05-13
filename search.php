@@ -48,7 +48,10 @@ if(!empty($_SESSION["id"])){
                 <form class="searchBar" id="searchForm">
                     <input type="text" id="searchInput" placeholder="What are you looking for?">
                     <input type="text" id="searchInputCreator" placeholder="Do you know the author?">
-                    <button type="submit">Search</button>
+                    <div class="btns">
+                        <button type="submit">Search</button>
+                        <button class="clearSearch" id="clearSearch">Clear</button>
+                    </div>
                 </form>
                 <div class="searchButtons" style="justify-content: flex-start;">
                     <div class="ingredient-dropdown">

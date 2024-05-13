@@ -36,6 +36,9 @@ function fetchRecipesByCategoryAndUser(categoryId, userId) {
     };
 
     xhr.send();
+
+    var clearSearchBtn = document.querySelector('.clearSearch');
+    clearSearchBtn.setAttribute("style", "visibility: visible");
 }
 
 function fetchRecipesBySearchQuery(searchQuery, creatorQuery, category, userId, ingredients) {
@@ -56,6 +59,9 @@ function fetchRecipesBySearchQuery(searchQuery, creatorQuery, category, userId, 
     };
 
     xhr.send();
+
+    var clearSearchBtn = document.querySelector('.clearSearch');
+    clearSearchBtn.setAttribute("style", "visibility: visible");
 }
 
 // not used in search.php
@@ -76,4 +82,13 @@ function fetchSortedRecipes(categoryId, orderBy, orderDirection) {
     };
 
     xhr.send();
+
+    var clearSearchBtn = document.querySelector('.clearSearch');
+    clearSearchBtn.setAttribute("style", "visibility: visible");
 }
+
+document.addEventListener("DOMContentLoaded", function() {
+    document.getElementById('clearSearch').addEventListener('click', function(event) {
+        location.reload();
+    });
+});
