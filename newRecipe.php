@@ -38,7 +38,7 @@ if(isset($_POST["add"])){
     $ingredients = $_POST["product"];
     $quantity = $_POST["product_amount"];
     $instructions = $_POST['instruction'];
-
+   
     if (empty($name) || empty($description)) {
         echo "<script>alert('Please fill in all the fields.')</script>";
     }
@@ -78,7 +78,9 @@ if(isset($_POST["add"])){
 
     foreach($quantity as $q)
     {  
-        $q = number_format($q, 0);
+        $q = trim($q);
+        $q = floatval($q);
+        $q = round($q, 1);
 
         $stmt = $conn->prepare($insertIngredients);
         $stmt->bind_param("iii", $q, $ingredients[$count], $recipeID);

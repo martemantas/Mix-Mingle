@@ -8,7 +8,7 @@ if(!empty($_SESSION["id"])){
 }
 
 // Store the previous page address
-$_SESSION['previous_page'] = $_POST['previous_page'];
+//$_SESSION['previous_page'] = $_POST['previous_page'];
 
 // Get products from the database
 $query =    "SELECT product.name as name, units.name as unit, product.product_id as id
@@ -298,7 +298,7 @@ if(isset($_POST["editRecipe"])){
         echo '</nav>';
     ?>
     <div class="container">
-        <h1 class="title">New recipe</h1>
+        <h1 class="title">Edit recipe</h1>
         <form action="" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
             <div class="field">
                 <input type="text" name="name" placeholder="Recipe name"  value="<?php echo $recipeName; ?>" required>
@@ -539,8 +539,7 @@ if(isset($_POST["editRecipe"])){
     }
 
     function goBack() {
-        var previousPage = "<?php echo $_SESSION['previous_page']; ?>";
-        window.location.href = previousPage;
+        window.history.back();
     }
 </script>
 </html>

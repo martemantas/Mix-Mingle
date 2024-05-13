@@ -55,8 +55,8 @@ if(!empty($_SESSION["id"])){
                         <div class="dropdown-content">
                             <a id="ascendingName">By name (a)</a>
                             <a id="descendingName">By name (z)</a>
-                            <a id="ascendingRating">By rating (lowest)</a>
-                            <a id="descendingRating">By rating (highest)</a>
+                            <a id="ascendingRating">By rating (ascending)</a>
+                            <a id="descendingRating">By rating (descending)</a>
                         </div>
                     </div>
                     <button id="favoriteButton">Favorite</button>
@@ -103,16 +103,14 @@ if(!empty($_SESSION["id"])){
                                 }
                                 // Check if user is admin or editor 
                                 if($row['role'] == 2 && $isOwner || $row['role'] == 3){
-                                    $currentPage = htmlspecialchars($_SERVER['REQUEST_URI']);
                                     echo '<form method="post" action="editRecipe.php">';
-                                    echo '<input type="hidden" name="previous_page" value="'.$currentPage.'">';
-                                    echo '<input type="hidden" name="recipe_id" value="'.$resultRow['recipe_id'].'">';
-                                    echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
-                                    echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
-                                    echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
-                                    echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button>';
-                                    echo '<button type="submit" class="edit" name="edit">E</button>';
-                                    echo '</div>';
+                                        echo '<input type="hidden" name="recipe_id" value="'.$resultRow['recipe_id'].'">';
+                                        echo '<div class="drink-card alcoholic" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\')">';
+                                        echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
+                                        echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1>';
+                                        echo '<button class="delete" value="'. $resultRow['recipe_id'] .'" id="confirmButton">&times;</button>';
+                                        echo '<button type="submit" class="edit" name="edit">E</button>';
+                                        echo '</div>';
                                     echo '</form>';
                                 }
                                 else {
@@ -213,6 +211,78 @@ if(!empty($_SESSION["id"])){
             fetchSortedRecipes(1, 'total_rating', 'DESC');
         });
     });
+
+    function displayRecipes(recipes) {
+    var recipesContainer = document.querySelector('.drink-cards');
+    recipesContainer.innerHTML = ''; 
+
+    if (recipes.length === 0) {
+        recipesContainer.textContent = 'No recipes found.';
+    } else {
+        recipes.forEach(function(recipe) {
+            var recipeCard = document.createElement('div');
+            recipeCard.classList.add('drink-card', 'alcoholic');
+
+            var imagePath = 'recipes/' + recipe.recipe_id + '.' + recipe.picture;
+            var img = document.createElement('img');
+            img.src = imagePath;
+            img.alt = recipe.name;
+            recipeCard.appendChild(img);
+
+            var name = document.createElement('h1');
+            name.classList.add('recipe-name');
+            name.textContent = recipe.name;
+            recipeCard.appendChild(name);
+
+            // Check if user is logged in
+            if (<?php echo !empty($_SESSION["id"]) ? 'true' : 'false'; ?>) {
+                var canEdit = <?php echo ($row['role'] == 2 && $isOwner) || $row['role'] == 3 ? 'true' : 'false'; ?>;
+
+                // If user is admin or editor and creator of the recipe
+                if (canEdit) {
+                    var editForm = document.createElement('form');
+                    editForm.method = 'post';
+                    editForm.action = 'editRecipe.php';
+
+                    var hiddenInput = document.createElement('input');
+                    hiddenInput.type = 'hidden';
+                    hiddenInput.name = 'recipe_id';
+                    hiddenInput.value = recipe.recipe_id;
+                    editForm.appendChild(hiddenInput);
+
+                    var editButton = document.createElement('button');
+                    editButton.type = 'submit';
+                    editButton.classList.add('edit');
+                    editButton.name = 'edit';
+                    editButton.textContent = 'E';
+                    editForm.appendChild(editButton);
+
+                    var deleteButton = document.createElement('button');
+                    deleteButton.type = 'button';
+                    deleteButton.classList.add('delete');
+                    deleteButton.value = recipe.recipe_id;
+                    deleteButton.textContent = '×';
+                    deleteButton.id = 'confirmButton';
+                    deleteButton.addEventListener('click', function() {
+                        var result = confirm("Are you sure you want to delete?");
+                        if (result) {
+                            deleteRecipe(recipe.recipe_id);
+                        }
+                    });
+                    editForm.appendChild(deleteButton);
+
+                    recipeCard.appendChild(editForm);
+                }
+            }
+                recipesContainer.appendChild(recipeCard);
+                recipeCard.addEventListener('click', function() {
+                    var formattedRating = parseFloat(recipe.total_rating).toFixed(2);
+                    openModal(recipe.recipe_id, imagePath, recipe.name, recipe.description, formattedRating, '<?php echo $sessionID; ?>');
+                });
+                closeModal(false);
+            });
+        }
+    }
 
     <?php if (!empty($_SESSION["id"])) { ?>
     document.addEventListener("DOMContentLoaded", function() {
