@@ -35,7 +35,7 @@ if(!empty($_SESSION["id"])){
                 echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }   
             if(!empty($_SESSION["id"]) && $row['role'] == 3){
-                echo '<li><a href="newUnit.php">Add unit</a></li>';
+                echo '<li><a href="newUnit.php">New unit</a></li>';
                 echo '<li><a href="admin.php">Admin</a></li>';
             } 
         echo '</ul>';

@@ -1,0 +1,55 @@
+@import url(https://fonts.googleapis.com/css?family=Roboto:300);
+
+/* Table */
+
+table {
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-left: auto;
+    margin-right: auto;
+    width: 60%;
+}
+th, td {
+    border: 1px solid #ddd;
+    padding: 8px;
+    text-align: left;
+}
+th {
+    background-color: var(--secondary-bg-color);
+}
+
+/* Dropdown */
+
+select {
+    border-radius: 5px;
+}
+
+/* Pop-up */
+
+.container {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form{
+    display: flex;
+    flex-direction: row;
+}
+
+button, input{
+    height: 100%;
+    padding: 3px;
+    border-radius: 8px;
+    background-color: var(--third-bg-color);
+    font-size: 18px;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+input {
+    background-color: var(--fourth-bg-color);
+}
