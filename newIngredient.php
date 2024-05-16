@@ -114,7 +114,7 @@ if(isset($_POST["add"])){
 
             <div style="display: block; padding-top: 20px">
                 <label for="ingredientName">Name:</label>
-                <input type="text" id="ingredientName" name="ingredientName" onkeydown="return /[a-z]/i.test(event.key)"  required>
+                <input type="text" id="ingredientName" name="ingredientName" onkeydown="return /[a-z ]/i.test(event.key)"  required>
 
                 <label for="unitId">Unit:</label>
                 <select id="unitId" name="unitId" required>
