@@ -674,6 +674,23 @@ footer p {
     padding: 20px 0;
 }
 
+/* CSS for draggable items */
+.draggable {
+    display: inline-block;
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    cursor: move;
+}
+
+.draggable-container {
+    margin-top: 10px;
+    width: 320px;
+    min-height: 100px;
+}
+
 
 /* Mobile */
 
