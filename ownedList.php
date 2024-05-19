@@ -15,7 +15,7 @@ $queryProducts = "SELECT * FROM product ORDER BY name";
 // Get units from the database
 $queryUnits = "SELECT * FROM units";
 
-//
+// Get items that user has in shopping list and owns
 $userID = $_SESSION['id'];
 $queryItems = "SELECT user_items.list_id as list_id, user_items.type as type, user_items.fk_product_id as product_id, user_items.fk_user_id as user_id, product.name as name
                 FROM user_items
@@ -51,9 +51,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
         foreach ($items as $item) {
             $productIDS = intval($item['id']);
             $type = intval($item['type']);
-            //echo $productIDS;
-            // Perform your insert or update operations here
-            // Example: Update the type of the item in the database
+
             if(count($itemArray) > 0)
             {
                 if(in_array($productIDS, $productID))
@@ -163,11 +161,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
 
     <div class="container">
         <h1 class="title">Ingredients</h1>
-        <!-- Container for draggable items -->
         <div class="draggable-container" id="draggable-container-grey" style="background-color: grey;">
             <h4 class="title" style="font-size: 20px; text-align: left; padding-left: 10px">All items:</h4>
             <?php
-            // Loop through productArray to create draggable items
             foreach ($productArray as $product) {
                 if(count($itemArray) > 0)
                 {
@@ -204,7 +200,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
             ?>
         </div>
 
-        <!-- Form and Save Button -->
         <form id="saveForm" action="ownedList.php" method="post">
             <input type="hidden" id="item-data" name="item-data">
             <button type="button" onclick="saveAllItems()">Save</button>

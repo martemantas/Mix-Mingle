@@ -429,6 +429,9 @@ section{
     font-weight: 500;
     cursor: pointer;
 }
+.container::-webkit-scrollbar {
+    display: none;
+}
 .surpriseContainer{
     align-items: center;
     position: absolute;
