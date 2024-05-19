@@ -7,48 +7,38 @@ if(!empty($_SESSION["id"])){
     $user = $row["user_id"];   
 }
 
-// Get products from the database
-$query =    "SELECT product.name as name, units.name as unit, product.product_id as id
-            FROM product
-            INNER JOIN units ON product.unit = units.unit_id
-            ORDER BY name";
-
-$query1 = "SELECT * FROM units";
+// Get units from the database
+$query = "SELECT * FROM units";
 
 $result = $conn->query($query);
 
-$result1 = $conn->query($query1);
-
-if ($result && $result1) {
-    $productArray = $result->fetch_all(MYSQLI_ASSOC);
-
-    $unitsArray = $result1->fetch_all(MYSQLI_ASSOC);
+if ($result) {
+    $unitsArray = $result->fetch_all(MYSQLI_ASSOC);
 } else {
     echo "Error: " . $conn->error;
 }
 
 if(isset($_POST["add"])){
-    $ingredientName = $_POST['ingredientName'];
-    $unitId = $_POST['unitId'];
+    $unitName = $_POST['unitName'];
 
     // Validate form data
-    if (empty($ingredientName) || empty($unitId)) {
+    if (empty($unitName)) {
         echo "<script>alert('Please fill in all the fields.')</script>";
     }
 
     // Insert new ingredient into the database
-    $insertQuery = "INSERT INTO `product` (`name`, `unit`) VALUES (?, ?)";
+    $insertQuery = "INSERT INTO `units` (`name`) VALUES (?)";
     $stmt = $conn->prepare($insertQuery);
-    $stmt->bind_param("si", $ingredientName, $unitId);
+    $stmt->bind_param("s", $unitName);
 
     try {
         if ($stmt->execute()) {
-            echo "<script>alert('New ingredient added successfully')</script>";
+            echo "<script>alert('New unit was added successfully')</script>";
 
             echo "<script>window.location.href = '$_SERVER[PHP_SELF]';</script>";
         }
     } catch (mysqli_sql_exception $e) {
-        echo "<script>alert('Ingredient was not added. Duplicate name.')</script>";
+        echo "<script>alert('Unit was not added. Duplicate name.')</script>";
     }
 
     $stmt->close();
@@ -62,7 +52,7 @@ if(isset($_POST["add"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="style.css">
     <link rel="stylesheet" href="newIngredient.css">
-    <title>New ingredient</title>
+    <title>New unit</title>
 </head>
 <script src="home.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
@@ -80,27 +70,25 @@ if(isset($_POST["add"])){
         echo '</nav>';
     ?>
     <div class="container">
-        <h1 class="title">New ingredient</h1>
+        <h1 class="title">New unit</h1>
         <form action="" method="POST" enctype="multipart/form-data" onsubmit="return validateForm()">
 
             <?php
-            if (isset($productArray) && count($productArray) > 0) {
+            if (isset($unitsArray) && count($unitsArray) > 0) {
             ?>
                 
                 <table>
                     <thead>
                         <tr>
-                            <th>Name</th>
                             <th>Unit</th>
                         </tr>
                     </thead>
                     <tbody>
                         <?php
-                        foreach ($productArray as $ingredient) {
+                        foreach ($unitsArray as $unit) {
                         ?>
                         <tr>
-                            <td><?php echo $ingredient["name"]; ?></td>
-                            <td><?php echo $ingredient["unit"]; ?></td>
+                            <td><?php echo $unit["name"]; ?></td>
                         <?php
                         }
                         ?>
@@ -108,25 +96,13 @@ if(isset($_POST["add"])){
                 </table>
             <?php
             } else {
-                echo "No ingredients";
+                echo "No units found.";
             }
             ?>
 
             <div style="display: block; padding-top: 20px">
-                <label for="ingredientName">Name:</label>
-                <input type="text" id="ingredientName" name="ingredientName" onkeydown="return /[a-z ]/i.test(event.key)"  required>
-
-                <label for="unitId">Unit:</label>
-                <select id="unitId" name="unitId" required>
-                    <?php
-                        foreach ($unitsArray as $unit) {
-                        ?>
-                            <option value="<?php echo $unit['unit_id']; ?>">
-                            <?php echo $unit['name']; ?></option>
-                        <?php
-                        }
-                    ?>
-                </select>
+                <label for="unitName">Name:</label>
+                <input type="text" id="unitName" name="unitName" onkeydown="return /[a-z]/i.test(event.key)"  required>
             </div>
             <div class="field btn">
                 <div class="btn-layer"></div>
