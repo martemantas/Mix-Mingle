@@ -28,7 +28,7 @@ function fetchRecipesByCategoryAndUser(categoryId, userId) {
         if (xhr.readyState === XMLHttpRequest.DONE) {
             if (xhr.status === 200) {
                 var recipes = JSON.parse(xhr.responseText);
-                displayRecipes(recipes, userId);
+                displayRecipes(recipes);
             } else {
                 console.error('Failed to fetch recipes:', xhr.status);
             }

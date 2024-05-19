@@ -48,7 +48,7 @@ if(isset($_POST["add"])){
     $fileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
     // Insert new recipe into the database
-    $insertRecipe = "INSERT INTO `recipe` (`name`, `description`, `picture`, `creator`, `category`) VALUES (?, ?, ?, ?, ?)";
+    $insertRecipe = "INSERT INTO `recipe` (`name`, `description`, `picture`, `creator`, `total_rating`, `category`) VALUES (?, ?, ?, ?, 0, ?)";
     $stmt = $conn->prepare($insertRecipe);
     $stmt->bind_param("ssssi", $name, $description, $fileType, $user, $category);
 
