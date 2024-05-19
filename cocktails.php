@@ -5,6 +5,10 @@ if(!empty($_SESSION["id"])){
     $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$sessionID'");
     $row = mysqli_fetch_assoc($result);
 }
+else{
+    $sessionID = null;
+}
+$isOwner = False;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -77,9 +81,7 @@ if(!empty($_SESSION["id"])){
                         $creator = mysqli_fetch_assoc(mysqli_query($conn, "SELECT username FROM users WHERE user_id = " . (int)$resultRow['creator']))['username'];
 
                         // Check if user is logged in
-                        if(!empty($_SESSION["id"])){
-                            $isOwner = False;
-                        
+                        if(!empty($_SESSION["id"])){                        
                             if($resultRow['creator'] == $_SESSION["id"])
                             {
                                 $isOwner = True;

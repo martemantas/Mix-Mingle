@@ -74,8 +74,7 @@ else{
             </div> 
             <div class="right-side">
                 <h2 class="backSideTitle">How to make it</h2>
-                <div id="recipeSteps">
-            </div>
+                <div id="recipeSteps"></div>
             </div>
             <button id="flipButton" class="backBtn" onclick="flipCard()">Back</button>
         </div>
@@ -129,7 +128,7 @@ function displayRecipe(recipe) {
 
     recipeCard.addEventListener('click', function(event) {
         event.preventDefault();
-        openModal(recipe.recipe_id, recipeImage.src, recipe.name, recipe.description, recipe.total_rating, <?php echo json_encode($sessionID); ?>, recipe.creator);
+        openModal(recipe.recipe_id, recipeImage.src, recipe.name, recipe.description, recipe.total_rating, '<?php echo $sessionID; ?>');
     });
     closeModal(false);
     

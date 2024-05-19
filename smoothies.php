@@ -5,6 +5,10 @@ if(!empty($_SESSION["id"])){
     $result = mysqli_query($conn, "SELECT * FROM users WHERE user_id = '$sessionID'");
     $row = mysqli_fetch_assoc($result);
 }
+else{
+    $sessionID = null;
+}
+$isOwner = False;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -78,8 +82,6 @@ if(!empty($_SESSION["id"])){
 
                         // Check if user is logged in
                         if(!empty($_SESSION["id"])){
-                            $isOwner = False;
-                        
                             if($resultRow['creator'] == $_SESSION["id"])
                             {
                                 $isOwner = True;
@@ -103,7 +105,7 @@ if(!empty($_SESSION["id"])){
                             }
                         }
                         else{
-                            echo '<div class="drink-card smoothies" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\')">';
+                            echo '<div class="drink-card smoothies" onclick="openModal('. $resultRow['recipe_id'] .', \''. $resultRow['picture'] .'\', \''. $resultRow['name'] .'\', \''. $resultRow['description'] .'\', \''. $resultRow['total_rating'] .'\', \''. $sessionID .'\', \''. $creator .'\')">';
                             echo '<img src="'.$resultRow['picture'].'" alt="'.$resultRow['name'].'">';
                             echo '<h1 class="recipe-name" style="text-align: center;">'. $resultRow['name'] .'</h1></div>';
                         }

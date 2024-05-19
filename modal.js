@@ -47,8 +47,10 @@ function openModal(recipeId, imgSrc, name, description, rating, user, creator) {
             modalRating.appendChild(emptyStar);
         }
     }
-    modalCreator.innerHTML = 'Made by: ';
-    modalCreator.innerHTML += creator;
+    if(modalCreator != undefined){
+        modalCreator.innerHTML = 'Made by: ';
+        modalCreator.innerHTML += creator;
+    }
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'getUserRating.php', true);

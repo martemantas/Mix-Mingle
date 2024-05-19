@@ -611,6 +611,7 @@ section{
     bottom: 0;
     left: 20%;
     transform: translateX(-50%);
+    padding-bottom: 15px;
 }
 
 /* Star styles */
@@ -777,7 +778,7 @@ footer p {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
     .drink-card{
-        height: 200px;
+        height: 210px;
         width: 150px;
         font-size: 12px;
     }
@@ -826,6 +827,8 @@ footer p {
     }
     .modalInfo {
         padding: 15px; 
+        padding-top: 0;
+        margin-top: 0;
     }
     #modalImg {
         margin: auto;
@@ -884,6 +887,9 @@ footer p {
     }
     .right-side ol{
         list-style-type: none;
+    }
+    .modalCreator{
+        padding-bottom: 0px;
     }
 
     /* Footer */
