@@ -27,7 +27,7 @@ if(!empty($_SESSION["id"])){
             echo '<li><a href="home.php">Home</a></li>';
             echo '<li><a href="surprise.php">Surprise Me</a></li>';
             echo '<li><a href="search.php">Search</a></li>';
-            if(!empty($_SESSION["id"]) && ($row['role'] == 2 || 3)){
+            if(!empty($_SESSION["id"]) && ($row['role'] > 1)){
                 echo '<li><a href="newRecipe.php">New recipe</a></li>';
                 echo '<li><a href="newIngredient.php">New ingredient</a></li>';
             }    
@@ -138,7 +138,7 @@ if(!empty($_SESSION["id"])){
                     <div id="ingredients"></div>
                 </div>
                 <div class="leave-rating">
-                    <p>Leave a review</p>
+                    <p><b>Leave a review</b></p>
                     <div id="reviewStars" class="stars"></div>
                 </div>
             </div> 

@@ -241,7 +241,7 @@ if(!empty($_SESSION["id"])){
 
             // Check if user is logged in
                 if (<?php echo !empty($_SESSION["id"]) ? 'true' : 'false'; ?>) {
-                    var canEdit = <?php echo ($row['role'] == 2 && $isOwner) || $row['role'] == 3 ? 'true' : 'false'; ?>;
+                    var canEdit = <?php echo ($row['role'] == 2) || $row['role'] == 3 ? 'true' : 'false'; ?>;
 
                     // If user is admin or editor and creator of the recipe
                     if (canEdit) {
