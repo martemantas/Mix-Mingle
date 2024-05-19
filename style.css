@@ -160,6 +160,7 @@ section{
 .drink-card img {
     max-width: 100%;
     border-radius: 8px;
+    max-height: 180px;
 }
 .form{
     max-height: 200px;
@@ -458,6 +459,7 @@ section{
 .random-card img {
     max-width: 100%;
     border-radius: 8px;
+    max-height: 180px;
 }
 
 /* Modal */
