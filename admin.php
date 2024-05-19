@@ -30,45 +30,82 @@ if (!empty($_SESSION["id"])) {
         echo "Error: " . $conn->error;
     }
 
-    // Confirmation for changing user role
-    if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['id']) && isset($_POST['role'])) {
-        $user_id = mysqli_real_escape_string($conn, $_POST['id']);
-        $role = mysqli_real_escape_string($conn, $_POST['role']);
+    // Update user role or ingredient unit
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+        if (isset($_POST['id']) && isset($_POST['role'])) {
+            $user_id = mysqli_real_escape_string($conn, $_POST['id']);
+            $role = mysqli_real_escape_string($conn, $_POST['role']);
 
-        $user_sql = "SELECT * FROM users WHERE user_id = '$user_id'";
-        $user_result = mysqli_query($conn, $user_sql);
-        $user_row = mysqli_fetch_assoc($user_result);
+            $user_sql = "SELECT * FROM users WHERE user_id = '$user_id'";
+            $user_result = mysqli_query($conn, $user_sql);
+            $user_row = mysqli_fetch_assoc($user_result);
 
-        $role_sql = "SELECT name FROM roles WHERE role_id = '$role'";
-        $role_result = mysqli_query($conn, $role_sql);
-        $role_row = mysqli_fetch_assoc($role_result);
-        $role_name = $role_row['name'];
+            $role_sql = "SELECT name FROM roles WHERE role_id = '$role'";
+            $role_result = mysqli_query($conn, $role_sql);
+            $role_row = mysqli_fetch_assoc($role_result);
+            $role_name = $role_row['name'];
 
-        if (isset($_POST['confirm'])) {
-            $update_sql = "UPDATE users SET role = '$role' WHERE user_id = '$user_id'";
-            if (mysqli_query($conn, $update_sql)) {
-                header("Location: admin.php");
-                exit();
+            if (isset($_POST['confirm'])) {
+                $update_sql = "UPDATE users SET role = '$role' WHERE user_id = '$user_id'";
+                if (mysqli_query($conn, $update_sql)) {
+                    header("Location: admin.php");
+                    exit();
+                } else {
+                    echo "Error updating record: " . mysqli_error($conn);
+                }
             } else {
-                echo "Error updating record: " . mysqli_error($conn);
-            }
-        } else {
-            echo "<div class='container'>";
-                echo "<h2>Confirmation</h2>";
-                    echo "<p>Are you sure you want to update the role of user '" . $user_row['username'] . "' to '" . $role_name . "'?</p>";
-                echo "<div class='form' style='padding-top: 10px;'>";
-                echo "<form method='post'>";
-                    echo "<input type='hidden' name='id' value='" . $user_id . "'>";
-                    echo "<input type='hidden' name='role' value='" . $role . "'>";
-                    echo "<input type='submit' name='confirm' value='Confirm'>";
-                echo "</form>";
-                    echo "<a href='admin.php' style='text-decoration: none;'><button style='margin-left: 3px;'>Cancel</button></a>";
+                echo "<div class='container'>";
+                    echo "<h2>Confirmation</h2>";
+                        echo "<p>Are you sure you want to update the role of user '" . $user_row['username'] . "' to '" . $role_name . "'?</p>";
+                    echo "<div class='form' style='padding-top: 10px;'>";
+                    echo "<form method='post'>";
+                        echo "<input type='hidden' name='id' value='" . $user_id . "'>";
+                        echo "<input type='hidden' name='role' value='" . $role . "'>";
+                        echo "<input type='submit' name='confirm' value='Confirm'>";
+                    echo "</form>";
+                        echo "<a href='admin.php' style='text-decoration: none;'><button style='margin-left: 3px;'>Cancel</button></a>";
+                    echo "</div>";
                 echo "</div>";
-            echo "</div>";
+            }
+        } elseif (isset($_POST['id']) && isset($_POST['unit'])) {
+            $ingredient_id = mysqli_real_escape_string($conn, $_POST['id']);
+            $unit_id = mysqli_real_escape_string($conn, $_POST['unit']);
+
+            $ingredient_sql = "SELECT * FROM product WHERE product_id = '$ingredient_id'";
+            $ingredient_result = mysqli_query($conn, $ingredient_sql);
+            $ingredient_row = mysqli_fetch_assoc($ingredient_result);
+
+            $unit_sql = "SELECT name FROM units WHERE unit_id = '$unit_id'";
+            $unit_result = mysqli_query($conn, $unit_sql);
+            $unit_row = mysqli_fetch_assoc($unit_result);
+            $unit_name = $unit_row['name'];
+
+            if (isset($_POST['confirm'])) {
+                $update_sql = "UPDATE product SET unit = '$unit_id' WHERE product_id = '$ingredient_id'";
+                if (mysqli_query($conn, $update_sql)) {
+                    header("Location: admin.php");
+                    exit();
+                } else {
+                    echo "Error updating record: " . mysqli_error($conn);
+                }
+            } else {
+                echo "<div class='container'>";
+                    echo "<h2>Confirmation</h2>";
+                        echo "<p>Are you sure you want to update the unit of ingredient '" . $ingredient_row['name'] . "' to '" . $unit_name . "'?</p>";
+                    echo "<div class='form' style='padding-top: 10px;'>";
+                    echo "<form method='post'>";
+                        echo "<input type='hidden' name='id' value='" . $ingredient_id . "'>";
+                        echo "<input type='hidden' name='unit' value='" . $unit_id . "'>";
+                        echo "<input type='submit' name='confirm' value='Confirm'>";
+                    echo "</form>";
+                        echo "<a href='admin.php' style='text-decoration: none;'><button style='margin-left: 3px;'>Cancel</button></a>";
+                    echo "</div>";
+                echo "</div>";
+            }
         }
     }
 
-    // Deleting
+    // Deleting ingredient
     if ($_SERVER["REQUEST_METHOD"] == "GET" && isset($_GET["action"]) && $_GET["action"] == "delete") {
         if (isset($_GET["type"]) && isset($_GET["id"])) {
             $type = $_GET["type"];
@@ -173,7 +210,7 @@ if (!empty($_SESSION["id"])) {
         }
         echo "</table>";
     } else {
-        echo "No non-admin users found.";
+        ?> <h1 style="font-size: 20px; padding-top: 10px; text-align: center;">No non-admin users found.</h1> <?php
     }
     $conn->close();
     ?>
@@ -197,8 +234,20 @@ if (!empty($_SESSION["id"])) {
                     ?>
                     <tr>
                         <td><?php echo $ingredient["name"]; ?></td>
-                        <td><?php echo $ingredient["unit"]; ?></td>
+                        <td>
+                            <form method='post' action='admin.php'>
+                                <input type='hidden' name='id' value='<?php echo $ingredient["id"]; ?>'>
+                                <select name='unit' onchange='this.form.submit()'>
+                                    <?php
+                                    foreach ($unitsArray as $unit) {
+                                        echo "<option value='" . $unit['unit_id'] . "'" . ($unit['name'] == $ingredient['unit'] ? "selected" : "") . ">" . $unit['name'] . "</option>";
+                                    }
+                                    ?>
+                                </select>
+                            </form>
+                        </td>
                         <td><a class="delete-link" href="#" onclick="confirmDelete('ingredient', <?php echo $ingredient['id']; ?>)" style="color: red;">Delete</a></td>
+                    </tr>
                     <?php
                     }
                     ?>
@@ -206,9 +255,10 @@ if (!empty($_SESSION["id"])) {
             </table>
         <?php
         } else {
-            echo "No ingredients";
+            ?> <h1 style="font-size: 20px; padding-top: 10px; text-align: center;">No ingredients</h1> <?php
         }
     ?>
+
 
     <!-- Unit table -->
     <?php
@@ -236,7 +286,7 @@ if (!empty($_SESSION["id"])) {
             </table>
         <?php
         } else {
-            echo "No units found.";
+            ?> <h1 style="font-size: 20px; padding-top: 10px; text-align: center;">No units.</h1> <?php
         }
     ?>
 

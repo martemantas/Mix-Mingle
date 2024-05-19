@@ -135,7 +135,7 @@ section{
     overflow-x: hidden;
     box-shadow: 0px 8px 10px -10px rgba(0, 0, 0, 0.5) inset, 0px -8px 10px -10px rgba(0, 0, 0, 0.5) inset;
     height: 100vh;
-    padding: 15px 40px 15px 10px;
+    padding: 15px 60px 15px 10px;
     position: relative;
 }
 
@@ -151,7 +151,7 @@ section{
     width: 200px;
     height: 250px;
     color: var(--text-primary-color);
-    font-size: 18px;
+    font-size: 15px;
     transition-duration: 0.3s;
     cursor: pointer;
     border-radius: 10px;
@@ -160,6 +160,9 @@ section{
 .drink-card img {
     max-width: 100%;
     border-radius: 8px;
+}
+.form{
+    max-height: 200px;
 }
 .drink-card h1 {
     margin: 0px;
@@ -176,7 +179,6 @@ section{
 }
 .smoothies{
     border: 1px solid green;
-    /* CHANGE */
 }
 .drink-card .delete{
     background-color: var(--third-bg-color);
@@ -482,6 +484,9 @@ section{
     color: #fff;
     background-color: var(--text-primary-color);
 }
+.modal-content::-webkit-scrollbar {
+    display: none;
+}
 #modalImg {
     margin: auto;
     padding-left: 5%;
@@ -498,6 +503,7 @@ section{
 .modalFavorite{
     display: flex;
     align-items: center;
+    max-height: 80px;
 }
 .modalFavorite .heart-icon{
     font-size: 48px;
@@ -572,9 +578,16 @@ section{
     padding: 30px 50px;
     margin: 10px 0;
     overflow-y: auto;
+    margin-bottom: 50px;
 }
 .flipped .leave-rating{
     text-align: center;
+}
+.right-side ol{
+    max-height: 220px;
+}
+.right-side::-webkit-scrollbar {
+    display: none;
 }
 .close {
     position: absolute;
@@ -594,7 +607,7 @@ section{
 .modalCreator{
     position: absolute;
     bottom: 0;
-    left: 50%;
+    left: 20%;
     transform: translateX(-50%);
 }
 
@@ -762,9 +775,9 @@ footer p {
         grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
     }
     .drink-card{
-        height: 180px;
+        height: 200px;
         width: 150px;
-        font-size: 16px;
+        font-size: 12px;
     }
     .cards{
         flex-direction: column;
@@ -820,8 +833,15 @@ footer p {
         height: auto;
         /* display: none; */
     }
-    .modalInfo #modalName, 
-    .modalInfo #modalDescription,
+    .modalInfo #modalName
+    {
+        text-align: center;
+    }
+    .modalInfo #modalDescription
+    {
+        overflow-y: auto;
+        max-height: 70px;
+    }
     .modalRating,
     .right-side,
     .backSideTitle {
@@ -845,7 +865,11 @@ footer p {
         padding: 20px; 
         border-right: none;
         margin: 0 auto;
+        max-height: 200px;
         /* overflow-y: auto; */
+    }
+    .flipped #recipeSteps{
+        overflow-y: auto;
     }
     .backSideTitle{
         padding-bottom: 20px;

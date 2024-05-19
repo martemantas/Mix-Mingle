@@ -15,11 +15,11 @@ if(isset($_POST["submitlogin"])){
             header("Location: home.php");
         }
         else{
-            echo "<script>alert('Neteisingas slaptažodis')</script>";
+            echo "<script>alert('Wrong password.')</script>";
         }
     }
     else{
-        echo "<script>alert('E-paštas neegzistuoja')</script>";
+        echo "<script>alert('E-mail does not exist.')</script>";
     }
 }
 if(isset($_POST["submitsignup"])){
@@ -31,18 +31,18 @@ if(isset($_POST["submitsignup"])){
    $dublicate = mysqli_query($conn, "SELECT * FROM users WHERE email = '$email'");
 
    if(mysqli_num_rows($dublicate) > 0){
-       echo "<script>alert('Šis E-paštas jau užimtas')</script>";
+       echo "<script>alert('This e-mail is already in use.')</script>";
    }
    else{
        if($password == $confirm_password){
            $password = password_hash($_POST["password"], PASSWORD_BCRYPT);
            $query = "INSERT INTO users VALUES('', '$name', '$password', '$email', '1', NULL, NULL)";
            mysqli_query($conn,$query);
-           echo "<script>alert('Sėkmingai užsiregistravote')</script>";
+           echo "<script>alert('Registered successfully.')</script>";
            //header("Location: login.php");
        }
        else{
-           echo "<script>alert('Slaptažodžiai nesutampa')</script>";
+           echo "<script>alert('Passwords do not match.')</script>";
        }
    }
 }
