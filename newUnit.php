@@ -102,7 +102,7 @@ if(isset($_POST["add"])){
 
             <div style="display: block; padding-top: 20px">
                 <label for="unitName">Name:</label>
-                <input type="text" id="unitName" name="unitName" onkeydown="return /[a-z]/i.test(event.key)"  required>
+                <input type="text" id="unitName" name="unitName" onkeydown="return /[a-z ]/i.test(event.key)"  required>
             </div>
             <div class="field btn">
                 <div class="btn-layer"></div>
