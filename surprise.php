@@ -129,7 +129,7 @@ function displayRecipe(recipe) {
 
     recipeCard.addEventListener('click', function(event) {
         event.preventDefault();
-        openModal(recipe.recipe_id, recipeImage.src, recipe.name, recipe.description, recipe.total_rating, <?php echo json_encode($sessionID); ?>);
+        openModal(recipe.recipe_id, recipeImage.src, recipe.name, recipe.description, recipe.total_rating, <?php echo json_encode($sessionID); ?>, recipe.creator);
     });
     closeModal(false);
     

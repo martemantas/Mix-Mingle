@@ -8,13 +8,14 @@ let filledStars = 0;
 var recipe_id;
 var userId;
 
-function openModal(recipeId, imgSrc, name, description, rating, user) {
+function openModal(recipeId, imgSrc, name, description, rating, user, creator) {
     recipe_id = recipeId;
     userId = user;
     var modalImg = modal.querySelector("#modalImg");
     var modalName = modal.querySelector("#modalName");
     var modalDescription = modal.querySelector("#modalDescription");
     var modalFavorite = modal.querySelector(".modalFavorite");
+    var modalCreator = modal.querySelector(".modalCreator");
 
     modal.style.display = "block";
     if(imgSrc != 'undefined'){
@@ -24,7 +25,7 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
     modalDescription.innerText = description;
     modalRatingText.innerHTML = rating;
     modalRating.innerHTML = '';
-    if (rating == 0 || rating == null) {
+    if (rating == 0) {
         modalRatingText.innerHTML = null;
         modalRating.innerText = "This recipe has no ratings";
         modalRating.classList.add('noStars');
@@ -46,6 +47,8 @@ function openModal(recipeId, imgSrc, name, description, rating, user) {
             modalRating.appendChild(emptyStar);
         }
     }
+    modalCreator.innerHTML = 'Made by: ';
+    modalCreator.innerHTML += creator;
 
     var xhr = new XMLHttpRequest();
     xhr.open('POST', 'getUserRating.php', true);
