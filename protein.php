@@ -202,7 +202,10 @@ $isOwner = False;
         recipesContainer.innerHTML = ''; 
 
         if (recipes.length === 0) {
-            recipesContainer.textContent = 'No recipes found.';
+            var noRecipesMessage = document.createElement('h3');
+            noRecipesMessage.textContent = 'No recipes found for the given category.';
+            noRecipesMessage.classList.add('search-error');
+            recipesContainer.appendChild(noRecipesMessage);
         } else {
             recipes.forEach(function(recipe) {
                 var recipeCard = document.createElement('div');

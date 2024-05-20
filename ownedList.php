@@ -121,7 +121,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
     <style>
         button {
             border-radius: 10px;
-            background-color: var(--fourth-bg-color);
+            background-color: var(--secondary-bg-color);
             color: white;
             padding: 14px 20px;
             margin-left: 20px;
@@ -161,7 +161,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
 
     <div class="container">
         <h1 class="title">Ingredients</h1>
-        <div class="draggable-container" id="draggable-container-grey" style="background-color: grey;">
+        <div class="draggable-container" id="draggable-container-grey" style="background-color: #6B705C;">
             <h4 class="title" style="font-size: 20px; text-align: left; padding-left: 10px">All items:</h4>
             <?php
             foreach ($productArray as $product) {
@@ -178,7 +178,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
             ?>
         </div>
 
-        <div class="draggable-container" id="draggable-container-shop" style="background-color: yellow;">
+        <div class="draggable-container" id="draggable-container-shop" style="background-color: #CB997E;">
             <h4 class="title" style="font-size: 20px; text-align: left; padding-left: 10px">Shopping list:</h4>
             <?php
                 foreach ($itemArray as $item) {
@@ -189,7 +189,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['item-data'])) {
             ?>
         </div>
 
-        <div class="draggable-container" id="draggable-container-ownd" style="background-color: green;">
+        <div class="draggable-container" id="draggable-container-ownd" style="background-color: #A5A58D;">
             <h4 class="title" style="font-size: 20px; text-align: left; padding-left: 10px">Owned items:</h4>
             <?php
                 foreach ($itemArray as $item) {
