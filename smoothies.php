@@ -163,7 +163,7 @@ $isOwner = False;
             echo '</div>';
             echo '<div class="submit">';
                 echo '<form method="post" action="suggestions.php">';
-                    echo '<input type="text" name="suggestion" placeholder="Enter your suggestion">';
+                    echo '<input type="text" name="suggestion" placeholder="Enter your suggestion" maxlength="60">';
                     echo '<button type="submit">Send</button>';
                 echo '</form>';
             echo '</div>';

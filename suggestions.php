@@ -15,7 +15,7 @@ if(!empty($_SESSION["id"])){
                 $stmt->bind_param("s", $suggestion);
                 $stmt->execute();
 
-                echo '<script>alert("Success"); window.history.back();</script>';
+                echo '<script>alert("Suggestion sent."); window.history.back();</script>';
                 exit();
             }
             else{
@@ -33,13 +33,15 @@ if($row['role'] != 3){
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
     <title>Suggestions</title>
     <style>
         table {
-            width: 100%;
+            width: 80%;
             border-collapse: collapse;
             border: 1px solid #ddd;
             margin-bottom: 20px;
+            margin: 20px;
         }
         th, td {
             padding: 8px;
@@ -58,7 +60,6 @@ if($row['role'] != 3){
     <table>
         <thead>
             <tr>
-                <th>Name</th>
                 <th>Description</th>
                 <th>Delete</th>
             </tr>
@@ -85,7 +86,6 @@ if($row['role'] != 3){
             if ($result = $conn->query($sql)) {
                 while ($row = $result->fetch_assoc()) {
                     echo "<tr>";
-                    echo "<td>" . $row['id'] . "</td>";
                     echo "<td>" . $row['suggestion'] . "</td>";
                     echo "<td>
                             <form method='post'>
