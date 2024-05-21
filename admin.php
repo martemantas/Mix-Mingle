@@ -168,6 +168,7 @@ if (!empty($_SESSION["id"])) {
         </div>
         <ul>
             <li><a href="home.php">Home</a></li>
+            <li><a href="suggestions.php">User suggestions</a></li>
         </ul>
         <?php
         if (empty($_SESSION["id"])) {
