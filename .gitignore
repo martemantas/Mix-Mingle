@@ -1,2 +1,4 @@
 
 /recipes
+vendor/composer/semver/
+vendor/phpmailer/phpmailer/
