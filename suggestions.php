@@ -57,6 +57,24 @@ if($row['role'] != 3){
     </style>
 </head>
 <body>
+    <?php
+    echo '<nav>';
+    echo '<div class="hamburger">';
+        echo '<span class="line"></span>';
+        echo '<span class="line"></span>';
+        echo '<span class="line"></span>';
+    echo '</div>';
+    echo '<ul>';
+        echo '<li><a href="home.php">Home</a></li>';
+    echo '</ul>';
+    if(empty($_SESSION["id"])){
+        echo '<li class="login"><a href="login.php">Login</a></li>';
+    }
+    else{
+        echo '<li class="login"><a href="logout.php">Logout</a></li>';
+    }
+echo '</nav>';
+    ?>
     <table>
         <thead>
             <tr>
